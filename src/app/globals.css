@@ -1,12 +1,65 @@
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fefefe;
+  --foreground: #1a1a1a;
+
+  /* Pokemon Type Colors */
+  --type-normal: #ccc;
+  --type-fire: #fd7d24;
+  --type-water: #4592c4;
+  --type-grass: #9bcc50;
+  --type-electric: #eed535;
+  --type-ice: #51c4e7;
+  --type-fighting: #d56723;
+  --type-poison: #b97fc9;
+  --type-ground: #f7de3f;
+  --type-ground-gradient: #ab9842;
+  --type-flying: #3dc7ef;
+  --type-flying-gradient: #bdb9b8;
+  --type-psychic: #f366b9;
+  --type-bug: #729f3f;
+  --type-rock: #a38c21;
+  --type-ghost: #7b62a3;
+  --type-dragon: #53a4cf;
+  --type-dragon-gradient: #f16e57;
+  --type-dark: #313131;
+  --type-steel: #9eb7b8;
+  --type-fairy: #fdb9e9;
+
+  /* Text Colors */
+  --text-dark: #212121;
+  --text-light: #fff;
+  --text-muted: #3b3b3a;
+
+  /* UI Colors */
+  --ui-background: #a4a4a4;
+  --ui-border: #ccc;
+  --ui-border-hover: #999;
+  --ui-focus: #007bff;
+  --ui-success: #54b564;
+  --ui-progress-bg: #f0f0f0;
+  --ui-progress-fill: #4CAF50;
+
+  /* Checkbox Colors */
+  --checkbox-bg: var(--background);
+  --checkbox-border: #ccc;
+  --checkbox-caught: var(--ui-success);
+  --checkbox-shiny: #ffd700;
+  --checkbox-shiny-gradient: #ffed4e;
+  --checkbox-shiny-shadow: rgba(255, 215, 0, 0.5);
+
+  /* Version Colors */
+  --version-scarlet: rgb(158, 42, 32);
+  --version-violet: #527;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #2b2a33;
     --foreground: #ededed;
+
+    --text-muted: #a4a4a6;
+
+    --ui-background: #3b3a44;
   }
 }
 
@@ -39,4 +92,17 @@ a {
   html {
     color-scheme: dark;
   }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  -webkit-clip-path: inset(50%);
+  clip-path: inset(50%);
+  border: 0;
 }

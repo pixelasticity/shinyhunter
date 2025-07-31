@@ -1,0 +1,332 @@
+.table {
+    margin-inline: auto;
+    position: relative;
+    top: -1.375em;
+    font-size: clamp(16px, 2.8125vw, 72px);
+    min-width: 768px;
+}
+
+.table td {
+    padding-inline: 8px;
+}
+
+.grid-view {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 128px);
+    gap: 0;
+    justify-content: center;
+    grid-auto-rows: 128px;
+    max-width: 80%;
+    margin-inline: auto;
+}
+
+.grid-view .pokemon {
+    margin: 0;
+    border-radius: 64px;
+    grid-template-areas:
+        "sprite" 
+        "sprite";
+    background-color: #eee;
+    box-shadow: none;
+}
+
+.grid-view .pokemon .checkbox,
+.grid-view .pokemon .info,
+.grid-view .pokemon .types {
+    display: none;
+}
+
+.grid-view .sprite::before {
+    mix-blend-mode: plus-lighter;
+}
+
+.pokemon {
+    max-width: 768px;
+    margin-inline: auto;
+    margin-block-end: 1.5em;
+    border-radius: 64px 16px 16px 64px;
+    background-color: rgb(242, 242, 242);
+    background-image: linear-gradient(100deg, rgba(255 255 255 / 0%), rgba(255 255 255 / 60%));
+    background-repeat: no-repeat;
+    gap: 0px 24px;
+    display: grid;
+    grid-template-areas: 
+        "sprite name checkbox"
+        "sprite types checkbox";
+    grid-template-columns: 128px 1fr 128px;
+    grid-template-rows: 72px 56px;
+    justify-content: start;
+    align-items: center;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 5px;
+    position: relative;
+    overflow: hidden;
+}
+
+.info {
+    justify-self: auto;
+    display: flex;
+    gap: 24px;
+    align-items: baseline;
+    align-self: end;
+}
+
+.name {
+    font-size: 36px;
+    line-height: 1.333;
+    font-weight: normal;
+    margin-block-end: 2px;
+}
+
+.heading {
+    background-color: var(--background);
+    padding-block: 0.5em;
+    clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+}
+
+.number {
+    font-size: 24px;
+    color: #616161;
+    font-weight: bold;
+}
+
+.hash {
+    font-size: 20px;
+    color: #919191;
+    font-weight: bold;
+}
+
+.sprite {
+    grid-area: sprite;
+}
+
+.sprite::before {
+    content: url('/pokéball.svg');
+    position: absolute;
+    width: 128px;
+    height: 128px;
+    mix-blend-mode: soft-light;
+    z-index: 1;
+}
+
+.sprite img {
+    display: block;
+    margin: 32px;
+    position: relative;
+    z-index: 2;
+    transition: filter 0.25s ease-in-out 0s;
+}
+
+.checkbox:has(button[class*='none']) ~ div.sprite img,
+.checkbox:not(:has(button[class*='caught'])) ~ div.sprite img
+.checkbox:not(:has(button[class*='shiny'])) ~ div.sprite img {
+    filter: contrast(0) brightness(.38);
+}
+
+.types {
+    min-width: calc(110px * 2 + 0.75em + 16px);
+    grid-area: 2 / 2 / 3 / 3;
+    margin-left: 0px;
+    align-self: start;
+}
+
+/* General type styling */
+.type {
+    box-sizing: content-box;
+    border: 0.125em solid rgba(255 255 255 / 42.5%);
+    border-radius: 0.3125em;
+    line-height: 1.75;
+    max-width: 110px;
+    width: 100%;
+    cursor: pointer;
+    float: left;
+    height: 1.75em;
+    margin: 0 0 0 0.75em;
+    text-align: center;
+    font-size: 1rem;
+}
+
+.type:first-child {
+    margin: 0;
+}
+
+/* Specific type colors */
+.normal {
+    background-color: var(--type-normal);
+    color: var(--text-dark);
+}
+.fire {
+    background-color: var(--type-fire);
+    color: var(--text-light);
+}
+.water {
+    background-color: var(--type-water);
+    color: var(--text-light);
+}
+.grass {
+    background-color: var(--type-grass);
+    color: var(--text-dark);
+}
+.electric {
+    background-color: var(--type-electric);
+    color: var(--text-dark);
+}
+.ice {
+    background-color: var(--type-ice);
+    color: var(--text-dark);
+}
+.fighting {
+    background-color: var(--type-fighting);
+    color: var(--text-light);
+}
+.poison {
+    background-color: var(--type-poison);
+    color: var(--text-light);
+}
+.ground {
+    background: linear-gradient(180deg, var(--type-ground) 50%, var(--type-ground-gradient) 50%);
+    background-color: var(--type-ground);
+    color: var(--text-dark);
+}
+.flying {
+    background: linear-gradient(180deg, var(--type-flying) 50%, var(--type-flying-gradient) 50%);
+    background-color: var(--type-flying);
+    color: var(--text-dark);
+}
+.psychic {
+    background-color: var(--type-psychic);
+    color: var(--text-light);
+}
+.bug {
+    background-color: var(--type-bug);
+    color: var(--text-light);
+}
+.rock {
+    background-color: var(--type-rock);
+    color: var(--text-light);
+}
+.ghost {
+    background-color: var(--type-ghost);
+    color: var(--text-light);
+}
+.dragon {
+    background: linear-gradient(180deg, var(--type-dragon) 50%, var(--type-dragon-gradient) 50%);
+    background-color: var(--type-dragon);
+    color: var(--text-light);
+}
+.dark {
+    background-color: var(--type-dark);
+    color: var(--text-light);
+}
+.steel {
+    background-color: var(--type-steel);
+    color: var(--text-dark);
+}
+.fairy {
+    background-color: var(--type-fairy);
+    color: var(--text-dark);
+}
+
+.checkbox {
+    grid-area: checkbox;
+    margin-left: calc(51.5px);
+    border-radius: 0px 4px;
+    z-index: 2;
+}
+
+/* Specific color styling */
+.white .sprite::before {
+    /* default */
+    mix-blend-mode: normal;
+    opacity: 0.25;
+}
+.brown {
+    background-color: #e1b578;
+}
+.red {
+    background-color: #f5c9bc;
+}
+.yellow {
+    background-color: #f5e7bc;
+}
+.green {
+    background-color: #dbf5bc;
+}
+.blue {
+    background-color: #bcedf5;
+}
+.purple {
+    background-color: #d6bcf5;
+}
+.pink {
+    background-color: #f5bcdc;
+}
+.gray {
+    background-color: #c1c1c1;
+}
+.black {
+    background-color: #818181;
+}
+
+@media (prefers-color-scheme: dark) {
+    .pokemon {
+        background-image: radial-gradient(rgba(255 255 255 / 25%), rgba(128 128 128 / 0%), rgba(0 0 0 / 35%));
+        background-position: center 100%;
+        background-size: 100% 200%;
+    }
+    .brown {
+        background-color: #8d4f24;
+    }
+    .red {
+        background-color: #c56128;
+    }
+    .yellow {
+        background-color: #bf8706;
+    }
+    .green {
+        background-color: #50a16f;
+    }
+    .blue {
+        background-color: #2389ac;
+    }
+    .purple {
+        background-color: #6729b0;
+    }
+    .pink {
+        background-color: #cb6f85;
+    }
+    .gray {
+        background-color: #566368;
+    }
+    .black {
+        background-color: #262f2e;
+    }
+}
+
+/* Version-specific styling */
+.tag-wrap {
+    grid-area: checkbox;
+    filter: drop-shadow(rgba(0, 0, 0, 0.25) 1px 2px 8px);
+    z-index: 1;
+}
+
+.tag {
+    width: 128px;
+    height: 128px;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 0%);
+    box-shadow: rgba(0, 0, 0, 0.25) 1px 2px 8px 0px;
+    background-size: cover, 31.25%;
+    background-repeat: no-repeat;
+    background-position: 80% 20%;
+}
+
+.scarlet {
+    background-color: var(--version-scarlet);
+    background-image: linear-gradient(to top right, rgba(255 255 255 / 40%), rgba(255 255 255 / 0%)),
+        url("/scarlet-shield.png");
+}
+
+.violet {
+    background-color: var(--version-violet);
+    background-image: linear-gradient(to top right, rgba(255 255 255 / 40%), rgba(255 255 255 / 0%)),
+        url("/violet-shield.png");
+}

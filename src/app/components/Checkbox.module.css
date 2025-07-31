@@ -1,0 +1,40 @@
+.checkbox {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--checkbox-border);
+  border-radius: 4px;
+  background: var(--checkbox-bg);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: all 0.2s ease;
+}
+
+.checkbox:hover {
+  border-color: var(--ui-border-hover);
+}
+
+.checkbox:focus {
+  outline: 2px solid var(--ui-focus);
+  outline-offset: 2px;
+}
+
+.none {
+  background: var(--checkbox-bg);
+  color: transparent;
+}
+
+.caught {
+  background: var(--checkbox-caught);
+  border-color: var(--checkbox-caught);
+  color: var(--text-light);
+}
+
+.shiny {
+  background: linear-gradient(45deg, var(--checkbox-shiny), var(--checkbox-shiny-gradient));
+  border-color: var(--checkbox-shiny);
+  color: var(--text-dark);
+  box-shadow: 0 0 8px var(--checkbox-shiny-shadow);
+} 

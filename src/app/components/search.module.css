@@ -1,0 +1,65 @@
+.form {
+    padding-block: 1em 4em;
+    background-color: var(--ui-background);
+}
+
+.box {
+    max-width: 768px;
+    margin-inline: auto;
+    position: relative;
+    display: flex;
+    flex: 1 0 100%;
+}
+
+.sr-only {
+    position: absolute;
+    left: -10000px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+.input {
+    display: block;
+    width: 100%;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 8px;
+    border: 1px solid oklch(92.8% 0.006 264.531);
+    padding-block: 9px;
+    padding-left: 2.5rem;
+    outline-width: 2px;
+}
+
+.input::placeholder {
+    color: oklch(55.1% 0.027 264.364);
+}
+
+.submit {
+    /* dark:invert */
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    appearance: none;
+    border: 0 none;
+    background-color: transparent;
+}
+
+.icon {
+    display: block;
+    height: 24px;
+    width: 24px;
+    color: oklch(55.1% 0.027 264.364);
+}
+
+@media (prefers-color-scheme: dark) {
+    .icon {
+        filter: invert(1);
+    }
+}
+
+.input:focus ~ .icon {
+    color: oklch(21% 0.034 264.665);
+}
