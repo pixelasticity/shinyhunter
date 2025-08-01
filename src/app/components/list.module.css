@@ -1,3 +1,12 @@
+.list-cont {
+    background-color: rgba(255 255 255 / 60%);
+    max-width: 72.5%;
+    margin-inline: auto;
+    border-width: 0 2px 0 2px;
+    border-color: rgba(250 253 255 / 100%);
+    border-style: solid;
+}
+
 .table {
     margin-inline: auto;
     position: relative;
