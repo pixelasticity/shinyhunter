@@ -192,7 +192,7 @@ export default function List({
   const filteredPokémon = fetchFilteredData(pokémon, query);
 
   return (
-    <>
+    <div className={styles['list-cont']}>
       <table className={styles['table']} role="table" aria-label={`${capitalizeFirst(name)} Pokédex`}>
         <thead>
           <tr>
@@ -205,6 +205,6 @@ export default function List({
         <PokemonRow key={entry.entry_number} entry={entry} />
       ))}
       </div>
-    </>
+    </div>
   )
 }
