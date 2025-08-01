@@ -24,7 +24,12 @@
 
 .header {
   text-align: center;
-  padding-block-start: 2em;
+  padding-block: 2em;
+  background-image: radial-gradient(circle at center,rgba(255,255,255,.1) .0938rem,transparent 0),linear-gradient(180deg,rgba(0,128,179,.75),rgba(0,128,179,.95) 100.06%);
+  background-position: top,top;
+  background-repeat: round,no-repeat;
+  background-size: .5625rem .5625rem,100% 100%;
+  border-bottom: 2px solid #fff;
 }
 
 .main {
