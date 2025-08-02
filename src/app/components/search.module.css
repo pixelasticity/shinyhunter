@@ -4,6 +4,12 @@
     background-color: var(--ui-background);
 }
 
+@media screen and (width = 1280px) {
+    .form {
+        clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 75% 100%, 68% 62.5%, 32% 62.5%, 25% 100%, 0% 100%);
+    }
+}
+
 .box {
     max-width: 768px;
     margin-inline: auto;

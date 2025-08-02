@@ -428,3 +428,10 @@
         height: 128px;
     }
 }
+
+@media screen and (width = 1280px) {
+    .heading {
+        background-color: transparent;
+        background-image: linear-gradient(rgba(43 42 51 / 60%) 60%, transparent 60%);
+    }
+}
