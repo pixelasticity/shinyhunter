@@ -223,7 +223,7 @@ export default function List({
   const filteredPokémon = fetchFilteredData(pokémon, query);
 
   return (
-    <div className={styles['list-cont']}>
+    <div className={styles['cont']}>
       <table className={styles['table']} role="table" aria-label={`${capitalizeFirst(name)} Pokédex`}>
         <thead>
           <tr>

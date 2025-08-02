@@ -1,5 +1,6 @@
 .form {
     padding-block: 1em 4em;
+    padding-inline: 12px;
     background-color: var(--ui-background);
 }
 

@@ -1,6 +1,6 @@
-.list-cont {
+.cont {
     background-color: rgba(255 255 255 / 60%);
-    max-width: 72.5%;
+    max-width: 94.25%;
     margin-inline: auto;
     border-width: 0 2px 0 2px;
     border-color: rgba(250 253 255 / 100%);
@@ -12,7 +12,8 @@
     position: relative;
     top: -1.375em;
     font-size: clamp(16px, 2.8125vw, 72px);
-    min-width: 768px;
+    width: 100%;
+    max-width: 768px;
 }
 
 .table td {
@@ -52,18 +53,15 @@
 .pokemon {
     max-width: 768px;
     margin-inline: auto;
-    margin-block-end: 1.5em;
-    border-radius: 64px 16px 16px 64px;
+    margin-block-end: 1em;
+    border-radius: 48px 16px 16px 48px;
     background-color: rgb(242, 242, 242);
     background-image: linear-gradient(100deg, rgba(255 255 255 / 0%), rgba(255 255 255 / 60%));
     background-repeat: no-repeat;
-    gap: 0px 24px;
+    gap: 0px;
     display: grid;
-    grid-template-areas: 
-        "sprite name checkbox"
-        "sprite types checkbox";
-    grid-template-columns: 128px 1fr 128px;
-    grid-template-rows: 72px 56px;
+    grid-template-columns: 96px 1fr 34px 62px;
+    grid-template-rows: 54px 42px;
     justify-content: start;
     align-items: center;
     box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 5px;
@@ -72,55 +70,61 @@
 }
 
 .info {
+    grid-area: 1 / 2 / 2 / 4;
     justify-self: auto;
     display: flex;
-    gap: 24px;
+    gap: 12px;
     align-items: baseline;
     align-self: end;
+    padding-left: 0.5em;
 }
 
 .name {
-    font-size: 36px;
+    font-size: 5.7971vw;
     line-height: 1.333;
     font-weight: normal;
     margin-block-end: 2px;
 }
 
 .heading {
+    font-size: 1em;
+    line-height: 1.22222;
     background-color: var(--background);
     padding-block: 0.5em;
     clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
 }
 
 .number {
-    font-size: 24px;
+    font-size: 4.347826vw;
     color: #616161;
     font-weight: bold;
 }
 
 .hash {
-    font-size: 20px;
     color: #919191;
     font-weight: bold;
 }
 
 .sprite {
-    grid-area: sprite;
+    grid-area: 1 / 1 / 3 / 2;
 }
 
 .sprite::before {
     content: url('/pokéball.svg');
     position: absolute;
-    width: 128px;
-    height: 128px;
+    width: 96px;
+    height: 96px;
     mix-blend-mode: soft-light;
     z-index: 1;
 }
 
 .sprite img {
+    --base: 20px;
     display: block;
-    margin: 32px;
+    margin: var(--base);
     position: relative;
+    width: calc(96px - (var(--base) * 2));
+    height: calc(96px - (var(--base) * 2));
     z-index: 2;
     transition: filter 0.25s ease-in-out 0s;
 }
@@ -132,26 +136,26 @@
 }
 
 .types {
-    min-width: calc(110px * 2 + 0.75em + 16px);
-    grid-area: 2 / 2 / 3 / 3;
+    grid-area: 2 / 2 / 3 / 4;
     margin-left: 0px;
     align-self: start;
+    padding-left: 0.5em;
 }
 
 /* General type styling */
 .type {
     box-sizing: content-box;
-    border: 0.125em solid rgba(255 255 255 / 42.5%);
+    border: 0.07142857em solid rgba(255 255 255 / 42.5%);
     border-radius: 0.3125em;
-    line-height: 1.75;
+    line-height: 1.7142857;
     max-width: 110px;
-    width: 100%;
     cursor: pointer;
     float: left;
-    height: 1.75em;
-    margin: 0 0 0 0.75em;
+    height: 1.7142857em;
+    margin: 0 0 0 0.5em;
     text-align: center;
-    font-size: 1rem;
+    font-size: .875rem;
+    padding: 0 1em;
 }
 
 .type:first-child {
@@ -236,10 +240,11 @@
 }
 
 .checkbox {
-    grid-area: checkbox;
-    margin-left: calc(51.5px);
+    grid-area: 1 / 3 / 3 / 5;
     border-radius: 0px 4px;
     z-index: 2;
+    align-self: center;
+    justify-self: center;
 }
 
 /* Specific color styling */
@@ -313,14 +318,14 @@
 
 /* Version-specific styling */
 .tag-wrap {
-    grid-area: checkbox;
+    grid-area: 1 / 3 / 3 / 5;
     filter: drop-shadow(rgba(0, 0, 0, 0.25) 1px 2px 8px);
     z-index: 1;
 }
 
 .tag {
-    width: 128px;
-    height: 128px;
+    width: 96px;
+    height: 96px;
     clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 0%);
     box-shadow: rgba(0, 0, 0, 0.25) 1px 2px 8px 0px;
     background-size: cover, 31.25%;
@@ -338,4 +343,83 @@
     background-color: var(--version-violet);
     background-image: linear-gradient(to top right, rgba(255 255 255 / 40%), rgba(255 255 255 / 0%)),
         url("/violet-shield.png");
+}
+
+@media screen and (width >= 600px) {
+    .cont {
+        max-width: 72.5%;
+    }
+
+    .pokemon {
+        margin-block-end: 1.5em;
+        border-radius: 64px 16px 16px 64px;
+        gap: 0px 24px;
+        grid-template-areas: 
+            "sprite name checkbox"
+            "sprite types checkbox";
+        grid-template-columns: 128px 1fr 128px;
+        grid-template-rows: 72px 56px;
+    }
+
+    .sprite {
+        grid-area: sprite;
+    }
+
+    .sprite::before {
+        width: 128px;
+        height: 128px;
+    }
+    
+    .sprite img {
+        height: auto;
+        width: auto;
+        margin: 32px;
+    }
+
+    .info {
+        grid-area: name;
+        gap: 24px;
+        padding: 0;
+    }
+    
+    .name {
+        font-size: 36px;
+    }
+
+    .number {
+        font-size: 24px;
+    }
+
+    .hash {
+        font-size: 20px;
+    }
+
+    .types {
+        min-width: calc(110px * 2 + 0.75em + 16px);
+        grid-area: 2 / 2 / 3 / 3;
+        padding-left: 0;
+    }
+
+    .type {
+        border-width: 0.125em;
+        line-height: 1.75;
+        width: 100%;
+        height: 1.75em;
+        margin: 0 0 0 0.75em;
+        font-size: 1rem;
+    }
+
+    .checkbox {
+        grid-area: checkbox;
+        margin-left: 51.5px;
+    }
+
+    .tag-wrap {
+        grid-area: checkbox;
+    }
+
+    .tag {
+        width: 128px;
+        height: 128px;
+    }
 }
