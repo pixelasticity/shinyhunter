@@ -282,6 +282,11 @@
 }
 
 @media (prefers-color-scheme: dark) {
+    .cont {
+        background-color: rgba(43 42 51 / 60%);
+        border-color: rgb(0 128 179);
+    }
+
     .pokemon {
         background-image: radial-gradient(rgba(255 255 255 / 25%), rgba(128 128 128 / 0%), rgba(0 0 0 / 35%));
         background-position: center 100%;

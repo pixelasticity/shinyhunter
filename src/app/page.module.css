@@ -51,6 +51,20 @@
   background-position: center -9px, center var(--base), center var(--base);
 }
 
+@media (prefers-color-scheme: dark) {
+  .content {
+    background-color: #313131;
+    background-image: linear-gradient(to bottom, transparent, var(--background));
+  }
+
+  .content > div {
+    background-image:
+      repeating-linear-gradient(to bottom, transparent, transparent var(--size), var(--ui-background) var(--size), var(--ui-background) calc(var(--size) + var(--gap))),
+      repeating-linear-gradient( 60deg, transparent, transparent var(--size), var(--ui-background) var(--size), var(--ui-background) calc(var(--size) + var(--gap)) ),
+      repeating-linear-gradient( 120deg, transparent, transparent var(--size), var(--ui-background) var(--size), var(--ui-background) calc(var(--size) + var(--gap)) );
+  }
+}
+
 .main {
   width: 100%;
   display: flex;
