@@ -176,7 +176,38 @@ export default function List({
   const { data: pokemonData, error, isLoading } = useSWR('https://pokeapi.co/api/v2/pokedex/31/');
 
   if (isLoading) {
-    return <div role="status" aria-live="polite">Loading Pokédex data...</div>;
+    return (
+      <div className={styles['cont']}>
+      <table className={styles['table']} role="table">
+        <thead>
+          <tr>
+            <th scope="colgroup" colSpan={5}><h3 className={styles.heading}>Loading&hellip;</h3></th>
+          </tr>
+        </thead>
+      </table>
+      <div className="view" role="list">
+        <div className={`${styles.pokemon} ${styles.gray}`} role="status" aria-live="polite">
+          <div className={styles.checkbox}>
+            <button type="button" className="Checkbox_checkbox__lq5py Checkbox_none__aIVHA"></button>
+            <Checkbox id={0} name="" speciesUrl="" />
+          </div>
+          <div className={styles.sprite}>
+            <Image alt="" width="64" height="64" src="/placeholder.png" />
+          </div>
+          <div className={styles.info}>
+            <span style={{height: 'calc(5.7971vw * 1.333)', marginBottom: '2px', width: '100%'}}>
+              <span style={{height: '5.7971vw', display: 'inline-block', width: '80%', backgroundColor: '#a4a4a4'}}></span>
+            </span>
+          </div>
+          <span className={styles.types} aria-label="Types loading">
+            <span role="term" className={`${styles.type} ${styles.normal}`}>
+              <span style={{display: 'inline-block', height: '0.875em', width: '35px',backgroundColor: '#a4a4a4'}}></span>
+            </span>
+          </span>
+        </div>
+        </div>
+      </div>
+    );
   }
 
   if (error) {
