@@ -57,7 +57,7 @@ export default function Stats({ totalPokemon = 0, className = '' }: StatsProps) 
   const getPokemonName = (id: number): string => {
     if (!pokemonData?.pokemon_entries) return `#${id}`;
     
-    const pokemon = pokemonData.pokemon_entries.find((entry: any) => entry.entry_number === id);
+    const pokemon = pokemonData.pokemon_entries.find((entry: Pokémon) => entry.entry_number === id);
     if (pokemon) {
       return pokemon.pokemon_species.name.charAt(0).toUpperCase() + pokemon.pokemon_species.name.slice(1);
     }
