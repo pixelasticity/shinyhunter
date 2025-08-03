@@ -1,6 +1,8 @@
 'use client';
 
 const KEY_PREFIX = 'pokemon-caught-';
+const MAX_POKEMON = 1025; // up to Gen IX
+
 // Utility functions for managing caught Pokemon state
 export const CaughtManager = {
   // Helper function to pad Pokemon ID with leading zeros
@@ -58,14 +60,14 @@ export const CaughtManager = {
   catchAll: (): void => {
     // This would need to be called with the total number of Pokemon
     // For now, we'll use a reasonable upper bound
-    for (let i = 1; i <= 1000; i++) {
+    for (let i = 1; i <= MAX_POKEMON; i++) {
       localStorage.setItem(CaughtManager.getStorageKey(i), 'caught');
     }
   },
 
   // Mark all Pokemon as not caught
   releaseAll: (): void => {
-    for (let i = 1; i <= 1000; i++) {
+    for (let i = 1; i <= MAX_POKEMON; i++) {
       localStorage.removeItem(CaughtManager.getStorageKey(i));
     }
   },
