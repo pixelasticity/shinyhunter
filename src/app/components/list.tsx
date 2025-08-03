@@ -40,7 +40,7 @@ type Types = {
 }
 
 // Component to fetch and display individual Pokemon data
-function PokemonRow({ entry }: { entry: any }) {
+function PokemonRow({ entry }: { entry: Pokémon }) {
   const capitalizeFirst = (str: string) => {
     return str.charAt(0).toUpperCase() + str.slice(1);
   };
@@ -138,7 +138,7 @@ function PokemonRow({ entry }: { entry: any }) {
   }
 
   // Get types from the Pokemon data
-  const types = pokemonData?.types?.map((type: any) => type.type.name) || [];
+  const types = pokemonData?.types?.map((type: Types) => type.type.name) || [];
   
   // Debug logging
   console.log(`${entry.pokemon_species.name} types:`, types);
@@ -246,7 +246,7 @@ export default function List({
         </thead>
       </table>
       <div className="view" role="list">
-      {filteredPokémon.map((entry: any) => (
+      {filteredPokémon.map((entry: Pokémon) => (
         <PokemonRow key={entry.entry_number} entry={entry} />
       ))}
       </div>
