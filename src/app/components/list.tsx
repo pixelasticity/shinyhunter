@@ -34,8 +34,37 @@ type Types = {
     // Search by name OR entry number (with normalized number matching)
 //     if (name.includes(searchQuery) || entryNumber === normalizedQuery) {
 //       filteredEntries.push(entry[1])
+//     }
 //   })
 //   return filteredEntries;
+// }
+
+function fetchFilteredData(
+  data: Record<string, Pokémon>,
+  query: string
+): Pokémon[] {
+  const values = Object.values(data);
+
+  const raw = query.toLowerCase().trim();
+  const nameQuery = raw.replace(/^0+/, '') || '0';     // for numeric lookups
+  const numberQuery = /^\d+$/.test(raw) ? parseInt(raw, 10) : null;
+
+  return values.filter(({ entry_number, pokemon_species }) => {
+    const name = pokemon_species.name.toLowerCase();
+
+    // 1) Exact match on entry number (if numeric)
+    if (numberQuery !== null && entry_number === numberQuery) {
+      return true;
+    }
+
+    // 2) Partial match on name
+    if (name.includes(raw)) {
+      return true;
+    }
+
+    // 3) Leading-zero normalized number as string
+    if (entry_number.toString() === nameQuery) {
+      return true;
     }
 }
 
