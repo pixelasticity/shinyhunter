@@ -416,7 +416,6 @@
 
     .checkbox {
         grid-area: checkbox;
-        margin-left: 51.5px;
     }
 
     .tag-wrap {
