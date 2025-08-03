@@ -10,6 +10,13 @@ interface StatsProps {
   className?: string;
 }
 
+type Pokémon = {
+  entry_number: number,
+  pokemon_species: {
+    name: string
+  }
+}
+
 export default function Stats({ totalPokemon = 0, className = '' }: StatsProps) {
   const [caughtCount, setCaughtCount] = useState(0);
   const [shinyCount, setShinyCount] = useState(0);
