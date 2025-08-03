@@ -66,6 +66,9 @@ function fetchFilteredData(
     if (entry_number.toString() === nameQuery) {
       return true;
     }
+
+    return false;
+  });
 }
 
 // Component to fetch and display individual Pokemon data
