@@ -67,7 +67,7 @@ export default function Stats({ totalPokemon = 0, className = '' }: StatsProps) 
   return (
     <div className={styles.progression}>
       <h3>Progress</h3>
-      <div style={{  }}>
+      <div className={className}>
         <strong>{caughtCount}</strong> / {totalPokemon} Pokemon caught ({percentage}%)
       </div>
       <div style={{ marginBottom: '10px', fontSize: '0.9em', color: 'var(--text-muted)' }}>
