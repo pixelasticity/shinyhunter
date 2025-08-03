@@ -18,7 +18,6 @@ export default function Checkbox({ id, name = '', speciesUrl = '', state: initia
   const {
     pokemonState,
     cycleState,
-    setState
   } = usePokemonState({
     entryNumber: Number(id),
     name,
