@@ -9,6 +9,14 @@ import { usePokemonState } from '../hooks/usePokemonState';
 function fetchFilteredData(data: any, query: string) {
   const filteredEntries: any[] = []
   const searchQuery = query.toLowerCase().trim()
+type Pokémon = {
+  entry_number: number,
+  pokemon_species: {
+    name: string,
+    url: string
+  }
+}
+
   
   // Normalize the search query - remove leading zeros for number searches
   const normalizedQuery = searchQuery.replace(/^0+/, '') || '0'
