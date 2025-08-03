@@ -1,10 +1,11 @@
 'use client';
 
+const KEY_PREFIX = 'pokemon-caught-';
 // Utility functions for managing caught Pokemon state
 export const CaughtManager = {
   // Helper function to pad Pokemon ID with leading zeros
   getStorageKey: (pokemonId: number) => {
-    return `pokemon-caught-${String(pokemonId).padStart(3, '0')}`;
+    return `${KEY_PREFIX}${String(pokemonId).padStart(3, '0')}`;
   },
 
   // Get all Pokemon with their states
@@ -12,8 +13,8 @@ export const CaughtManager = {
     const states: { [key: number]: 'caught' | 'shiny' } = {};
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
-      if (key?.startsWith('pokemon-caught-')) {
-        const id = parseInt(key.replace('pokemon-caught-', ''));
+      if (key?.startsWith(KEY_PREFIX)) {
+        const id = parseInt(key.replace(KEY_PREFIX, ''));
         const state = localStorage.getItem(key) as 'caught' | 'shiny';
         if (state) {
           states[id] = state;
