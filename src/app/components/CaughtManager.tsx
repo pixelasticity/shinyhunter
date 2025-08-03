@@ -1,5 +1,8 @@
 'use client';
 
+// type PokemonState = 'caught' | 'shiny';
+// type StateMap = Record<number, PokemonState>;
+
 const KEY_PREFIX = 'pokemon-caught-';
 const MAX_POKEMON = 1025; // up to Gen IX
 
@@ -35,8 +38,8 @@ export const CaughtManager = {
   getShinyPokemon: (): number[] => {
     const states = CaughtManager.getPokemonStates();
     return Object.entries(states)
-      .filter(([_, state]) => state === 'shiny')
-      .map(([id, _]) => parseInt(id))
+      .filter(([, state]) => state === 'shiny')
+      .map(([id]) => parseInt(id))
       .sort((a, b) => a - b);
   },
 
