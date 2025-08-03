@@ -2,13 +2,13 @@
  
 import Image from "next/image";
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
-import { useCallback } from 'react';
+import { useCallback, useRef } from 'react';
 import styles from './search.module.css';
  
 export default function Search({ placeholder }: { placeholder: string }) {
-    const searchParams = useSearchParams();
-    const pathname = usePathname();
-    const { replace } = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { replace } = useRouter();
 
   const handleSearch = useCallback(
     (term: string) => {
@@ -23,16 +23,17 @@ export default function Search({ placeholder }: { placeholder: string }) {
     [searchParams, pathname, replace]
   );
 
-  const debouncedSearch = useCallback(
-    (() => {
-      let timeoutId: NodeJS.Timeout;
-      return (term: string) => {
-        clearTimeout(timeoutId);
-        timeoutId = setTimeout(() => handleSearch(term), 300);
-      };
-    })(),
-    [handleSearch]
-  );
+  // Create a ref to hold the timeout ID
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const debouncedSearch = useCallback((term: string) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = setTimeout(() => {
+      handleSearch(term);
+    }, 300);
+  }, [handleSearch]);
  
   return (
     <form className={styles.form}>
