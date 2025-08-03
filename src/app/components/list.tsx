@@ -17,6 +17,12 @@ type Pokémon = {
   }
 }
 
+type Types = {
+  type: {
+    name: string
+  }
+}
+
   
   // Normalize the search query - remove leading zeros for number searches
   const normalizedQuery = searchQuery.replace(/^0+/, '') || '0'
