@@ -1,6 +1,5 @@
 import Image from "next/image";
 
-export default function ListItem({entry}: {entry: any}) {
 type Pokémon = {
     entry_number: number,
     pokemon_species: {
@@ -9,6 +8,7 @@ type Pokémon = {
     }
 }
 
+export default function ListItem({entry}: {entry: Pokémon}) {
     return (
         <div style={{ maxWidth: '768px', marginInline: 'auto', borderRadius: '64px 16px 16px 64px', backgroundColor: '#f2f2f2', backgroundImage: 'linear-gradient(100deg, #e8e8e8, #fcfcfc)', backgroundRepeat: 'no-repeat', gap: '0 24px', display: 'grid',gridTemplateColumns: '128px 1fr 128px', gridTemplateRows: 'repeat(2, 64px)', justifyContent: 'start', alignItems: 'center', boxShadow: '0 2px 5px rgba(0 0 0 / 15%)', position: 'relative', overflow: 'hidden' }} key={entry.entry_number} className={versionClass}>
             <div className="sprite" style={{ gridRow: '1 / 2', alignSelf: 'flex-start', padding: '32px', backgroundImage: 'radial-gradient(rgba(255 255 255 / 60%) 60%, rgba(31 31 31 / 8%) 60%, rgba(0 0 0 / 8%) 70%, transparent 71%)' }}>
