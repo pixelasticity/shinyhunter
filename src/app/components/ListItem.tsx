@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Checkbox from "./Checkbox";
 
 type Pokémon = {
     entry_number: number,
