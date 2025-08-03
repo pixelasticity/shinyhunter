@@ -53,12 +53,12 @@ export default function Search({ placeholder }: { placeholder: string }) {
         />
         <button type="submit" className={styles.submit}>
           <Image
-              className={styles.icon}
-              src="/magnifying-glass.svg"
-              alt="Search"
-              width={24}
-              height={24}
-              priority
+            className={styles.icon}
+            src="/magnifying-glass.svg"
+            alt="Search"
+            width={24}
+            height={24}
+            priority
             />
         </button>
       </div>
