@@ -2,7 +2,7 @@
  
 import Image from "next/image";
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
-import { useCallback, useRef } from 'react';
+import { Suspense, useCallback, useRef } from 'react';
 import styles from './search.module.css';
  
 export default function Search({ placeholder }: { placeholder: string }) {
@@ -41,6 +41,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
         <label id="search-description"  htmlFor="search" className={styles['sr-only']}>
         Search for Pokemon by name or Pokédex number
         </label>
+        <Suspense fallback="Loading&hellip;">
         <input
           id="search"
           type="search"
@@ -52,6 +53,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
           defaultValue={searchParams.get('query')?.toString()}
           aria-describedby="search-description"
         />
+        </Suspense>
         <button type="submit" className={styles.submit}>
           <Image
             className={styles.icon}
