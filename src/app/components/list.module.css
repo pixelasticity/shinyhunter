@@ -87,11 +87,11 @@
 }
 
 .heading {
-    font-size: 1em;
-    line-height: 1.22222;
+    font-size: 1.35em;
+    line-height: 1.222222;
     background-color: var(--background);
     padding-block: 0.5em;
-    clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+    clip-path: polygon(10.471204% 0%, 89.528796% 0%, 100% 100%, 0% 100%);
 }
 
 .number {
@@ -355,6 +355,10 @@
         max-width: 72.5%;
     }
 
+    .heading {
+        font-size: 1em;
+    }
+
     .pokemon {
         margin-block-end: 1.5em;
         border-radius: 64px 16px 16px 64px;
@@ -430,7 +434,14 @@
 
 @media screen and (width = 1280px) {
     .heading {
+        --header-bg-rgb: 255 255 255;
         background-color: transparent;
-        background-image: linear-gradient(rgba(43 42 51 / 60%) 60%, transparent 60%);
+        background-image: linear-gradient(rgba(var(---header-bg-rgb) / 60%) 60%, transparent 60%);
+    }
+}
+
+@media screen and (width = 1280px) and (prefers-color-scheme: dark) {
+    .heading {
+        --header-bg-rgb: 43 42 51;
     }
 }
