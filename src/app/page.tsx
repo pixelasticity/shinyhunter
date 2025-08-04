@@ -30,7 +30,9 @@ export default function Home() {
           <Stats totalPokemon={400} />
           <div className={styles.content}>
             <div style={{ flex: 1 }}>
-              <Search placeholder="Search by name or number&hellip;" />
+              <Suspense>
+                <Search placeholder="Search by name or number&hellip;" />
+              </Suspense>
               <Suspense key={query} fallback={<div>Loading&hellip;</div>}>
                 <List query={query} />
               </Suspense>
