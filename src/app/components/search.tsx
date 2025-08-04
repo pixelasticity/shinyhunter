@@ -1,11 +1,12 @@
 'use client';
  
+import { Suspense } from "react";
 import Image from "next/image";
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 import { useCallback, useRef } from 'react';
 import styles from './search.module.css';
  
-export default function Search({ placeholder }: { placeholder: string }) {
+function SearchForm({ placeholder }: { placeholder: string }) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
@@ -36,7 +37,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
   }, [handleSearch]);
  
   return (
-    <form className={styles.form}>
+    <form className={styles.form} role="search">
       <div className={styles.box}>
         <label id="search-description"  htmlFor="search" className={styles['sr-only']}>
         Search for Pokemon by name or Pokédex number
@@ -65,4 +66,13 @@ export default function Search({ placeholder }: { placeholder: string }) {
       </div>
     </form>
   );
+}
+
+export function Search({ placeholder }: { placeholder: string }) {
+  return (
+    // You could have a loading skeleton as the `fallback` too
+    <Suspense>
+      <SearchForm placeholder={placeholder} />
+    </Suspense>
+  )
 }
