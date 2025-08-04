@@ -8,17 +8,9 @@ import List from "./components/list";
 import Stats from "./components/Stats";
 import SkipLink from "./components/SkipLink";
 import SWRProvider from "./components/SWRProvider";
+import QueryProvider from "./components/QueryProvider";
 
 export default function Home() {
-  const [query, setQuery] = useState('');
-  const searchParams = useSearchParams();
-
-  useEffect(() => {
-    // Update query when search params change
-    const urlQuery = searchParams.get('query') || '';
-    setQuery(urlQuery);
-  }, [searchParams]);
-
   return (
     <SWRProvider>
       <SkipLink />
@@ -33,8 +25,10 @@ export default function Home() {
               <Suspense>
                 <Search placeholder="Search by name or number&hellip;" />
               </Suspense>
-              <Suspense key={query} fallback={<div>Loading&hellip;</div>}>
-                <List query={query} />
+              <Suspense fallback={<div>Loading&hellip;</div>}>
+                <QueryProvider>
+                  {(query) => <List query={query} />}
+                </QueryProvider>
               </Suspense>
             </div>
           </div>
