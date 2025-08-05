@@ -152,10 +152,6 @@ function PokemonRow({ entry }: { entry: Pokémon }) {
 
   // Get types from the Pokemon data
   const types = pokemonData?.types?.map((type: Types) => type.type.name) || [];
-  
-  // Debug logging
-  console.log(`${entry.pokemon_species.name} types:`, types);
-  console.log('Pokemon data:', pokemonData);
 
   return (
     <div key={entry.entry_number} className={`${styles['pokemon']} ${styles[color]}`}>
