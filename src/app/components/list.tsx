@@ -5,6 +5,7 @@ import useSWR from 'swr';
 import styles from './list.module.css';
 import Checkbox from './Checkbox';
 import { usePokemonState } from '../hooks/usePokemonState';
+import { capitalizeFirst } from '../lib/utils';
 
 type Pokémon = {
   entry_number: number,
@@ -54,10 +55,6 @@ function fetchFilteredData(
 
 // Component to fetch and display individual Pokemon data
 function PokemonRow({ entry }: { entry: Pokémon }) {
-  const capitalizeFirst = (str: string) => {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  };
-
   // Use the custom hook for Pokemon state management
   const {
     spriteInfo,
