@@ -5,6 +5,7 @@ import useSWR from 'swr';
 import styles from './list.module.css';
 import Checkbox from './Checkbox';
 import { usePokemonState } from '../hooks/usePokemonState';
+import { useBatchedPokemonData } from '../hooks/useBatchedPokemonData';
 import { capitalizeFirst } from '../lib/utils';
 
 type Pokémon = {
@@ -53,8 +54,18 @@ function fetchFilteredData(
   });
 }
 
-// Component to fetch and display individual Pokemon data
-function PokemonRow({ entry }: { entry: Pokémon }) {
+// Component to display individual Pokemon data with batched data
+function PokemonRow({ 
+  entry, 
+  pokemonData, 
+  speciesData, 
+  isLoading 
+}: { 
+  entry: Pokémon;
+  pokemonData?: any;
+  speciesData?: any;
+  isLoading: boolean;
+}) {
   // Use the custom hook for Pokemon state management
   const {
     spriteInfo,
@@ -66,22 +77,6 @@ function PokemonRow({ entry }: { entry: Pokémon }) {
     speciesUrl: entry.pokemon_species.url,
     styles
   });
-
-  // Convert species URL to Pokemon URL to get types
-  // Species URL: https://pokeapi.co/api/v2/pokemon-species/1/
-  // Pokemon URL: https://pokeapi.co/api/v2/pokemon/1/
-  const pokemonUrl = entry.pokemon_species.url.replace('pokemon-species', 'pokemon');
-
-  // Fetch individual Pokemon data using the Pokemon URL
-  const { data: pokemonData, error, isLoading } = useSWR(
-    pokemonUrl,
-    (url: string) => fetch(url).then(res => res.json())
-  );
-
-  const { data: speciesData } = useSWR(
-    entry.pokemon_species.url,
-    (url: string) => fetch(url).then(res => res.json())
-  )
 
   // Get color from the Pokémon data
   const color = speciesData?.color?.name || null;
@@ -116,7 +111,11 @@ function PokemonRow({ entry }: { entry: Pokémon }) {
     );
   }
 
-  if (error) {
+  // Get types from the Pokemon data
+  const types = pokemonData?.types?.map((type: Types) => type.type.name) || [];
+
+  // Handle missing data gracefully
+  if (!pokemonData) {
     return (
       <div key={entry.entry_number} className={`${styles['pokemon']} ${styles[color]}`}>
         <div className={styles.checkbox} >
@@ -131,13 +130,13 @@ function PokemonRow({ entry }: { entry: Pokémon }) {
             <span className={styles.hash}><span className="visually-hidden">Number</span><span role='presentation'>#</span></span>{formattedEntryNumber}
           </span>
         </div>
-        <span className={styles.types} aria-label="The types encountered an error">
+        <span className={styles.types} aria-label="Types unavailable">
           <span 
             className={styles['type']}
             role="term"
             aria-label="Missing type"
           >
-            Error
+            Unknown
           </span>
         </span>
         {versionClass && <div className={styles['tag-wrap']}>
@@ -146,9 +145,6 @@ function PokemonRow({ entry }: { entry: Pokémon }) {
       </div>
     );
   }
-
-  // Get types from the Pokemon data
-  const types = pokemonData?.types?.map((type: Types) => type.type.name) || [];
 
   return (
     <div key={entry.entry_number} className={`${styles['pokemon']} ${styles[color]}`}>
@@ -195,6 +191,21 @@ export default function List({
   // Use SWR for data fetching with caching
   const { data: pokemonData, error, isLoading } = useSWR('https://pokeapi.co/api/v2/pokedex/31/');
 
+  // Get Pokemon entries for batched data fetching
+  const pokemonEntries = pokemonData?.pokemon_entries || [];
+  
+  // Use batched data hook
+  const {
+    getPokemonData,
+    getSpeciesData,
+    isLoading: batchLoading,
+    error: batchError
+  } = useBatchedPokemonData(pokemonEntries);
+
+  // Filter Pokemon based on query
+  const pokémon = pokemonData?.pokemon_entries || {};
+  const filteredPokémon = fetchFilteredData(pokémon, query);
+
   if (isLoading) {
     return (
       <div className={styles['cont']}>
@@ -234,13 +245,15 @@ export default function List({
     return <div role="alert" aria-live="assertive">Error loading data: {error.message}</div>;
   }
 
+  if (batchError) {
+    return <div role="alert" aria-live="assertive">Error loading Pokemon data: {batchError.message}</div>;
+  }
+
   if (!pokemonData) {
     return <div role="status">No Pokédex data available</div>;
   }
 
   const name = pokemonData.name;
-  const pokémon = pokemonData.pokemon_entries;
-  const filteredPokémon = fetchFilteredData(pokémon, query);
 
   return (
     <div className={styles['cont']}>
