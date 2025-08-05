@@ -16,7 +16,7 @@ export default function Home() {
       <SkipLink />
       <div className={styles.page}>
         <header className={styles.header}>
-          <h1>Shiny Hunt</h1>
+          <h1>Shiny Hunter</h1>
         </header>
         <main id="main-content" className={styles.main}>
           <Stats totalPokemon={400} />
