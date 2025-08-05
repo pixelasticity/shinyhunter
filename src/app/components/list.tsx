@@ -20,25 +20,6 @@ type Types = {
   }
 }
 
-// function fetchFilteredData(data: any, query: string) {
-//   const filteredEntries: any[] = []
-//   const searchQuery = query.toLowerCase().trim()
-  
-  // Normalize the search query - remove leading zeros for number searches
-//   const normalizedQuery = searchQuery.replace(/^0+/, '') || '0'
-  
-//   Object.entries(data).forEach(function (entry: [string, Pokémon]) {
-//     const name = entry[1].pokemon_species.name.toLowerCase()
-//     const entryNumber = entry[1].entry_number.toString()
-    
-    // Search by name OR entry number (with normalized number matching)
-//     if (name.includes(searchQuery) || entryNumber === normalizedQuery) {
-//       filteredEntries.push(entry[1])
-//     }
-//   })
-//   return filteredEntries;
-// }
-
 function fetchFilteredData(
   data: Record<string, Pokémon>,
   query: string
