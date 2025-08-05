@@ -3,7 +3,7 @@
 import { Suspense } from "react";
 import Image from "next/image";
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
-import { useCallback, useRef } from 'react';
+import { useDebouncedCallback } from '../hooks/useDebouncedCallback';
 import styles from './search.module.css';
  
 function SearchForm({ placeholder }: { placeholder: string }) {
@@ -11,30 +11,15 @@ function SearchForm({ placeholder }: { placeholder: string }) {
   const pathname = usePathname();
   const { replace } = useRouter();
 
-  const handleSearch = useCallback(
-    (term: string) => {
-      const params = new URLSearchParams(searchParams);
-      if (term) {
-        params.set('query', term);
-      } else {
-        params.delete('query');
-      }
-      replace(`${pathname}?${params.toString()}`);
-    },
-    [searchParams, pathname, replace]
-  );
-
-  // Create a ref to hold the timeout ID
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  const debouncedSearch = useCallback((term: string) => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
+  const handleSearch = useDebouncedCallback((term: string) => {
+    const params = new URLSearchParams(searchParams);
+    if (term) {
+      params.set('query', term);
+    } else {
+      params.delete('query');
     }
-    timeoutRef.current = setTimeout(() => {
-      handleSearch(term);
-    }, 300);
-  }, [handleSearch]);
+    replace(`${pathname}?${params.toString()}`);
+  }, 300);
  
   return (
     <form className={styles.form} role="search">
@@ -47,9 +32,7 @@ function SearchForm({ placeholder }: { placeholder: string }) {
           type="search"
           className={styles.input}
           placeholder={placeholder}
-          onChange={(e) => {
-            debouncedSearch(e.target.value);
-          }}
+          onChange={(e) => handleSearch(e.target.value)}
           defaultValue={searchParams.get('query')?.toString()}
           aria-describedby="search-description"
         />
