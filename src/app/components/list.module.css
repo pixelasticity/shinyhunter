@@ -442,6 +442,6 @@
 
 @media screen and (width = 1280px) and (prefers-color-scheme: dark) {
     .heading {
-        --header-bg-rgb: 43 42 51;
+        --header-bg-rgb: rgba(43 42 51 / 60%);
     }
 }
