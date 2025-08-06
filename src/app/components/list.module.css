@@ -434,9 +434,9 @@
 
 @media screen and (width = 1280px) {
     .heading {
-        --header-bg-rgb: 255 255 255;
+        --header-bg-rgb: rgba(255 255 255 / 60%);
         background-color: transparent;
-        background-image: linear-gradient(rgba(var(---header-bg-rgb) / 60%) 60%, transparent 60%);
+        background-image: linear-gradient(var(--header-bg-rgb) 60%, transparent 60%);
     }
 }
 
