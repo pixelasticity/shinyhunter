@@ -210,13 +210,13 @@ export default function List({
   if (isLoading) {
     return (
       <div className={styles['cont']}>
-      <table className={styles['table']} role="table">
-        <thead>
-          <tr>
-            <th scope="colgroup" colSpan={5}><h3 className={styles.heading}>Loading&hellip;</h3></th>
-          </tr>
-        </thead>
-      </table>
+        <table className={styles['table']} role="table">
+          <thead>
+            <tr>
+              <th scope="colgroup" colSpan={5}><h3 className={styles.heading}>Loading&hellip;</h3></th>
+            </tr>
+          </thead>
+        </table>
         <ListSkeleton />
       </div>
     );
