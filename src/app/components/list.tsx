@@ -1,11 +1,12 @@
 'use client';
 
 import Image from 'next/image';
-import useSWR from 'swr';
+import { useMemo, useRef } from 'react';
 import styles from './list.module.css';
 import Checkbox from './Checkbox';
 import { usePokemonState } from '../hooks/usePokemonState';
 import { useBatchedPokemonData } from '../hooks/useBatchedPokemonData';
+import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 import { capitalizeFirst } from '../lib/utils';
 import ListSkeleton from './skeletons';
 
@@ -25,28 +26,36 @@ type Types = {
 
 function fetchFilteredData(
   data: Record<string, Pokémon>,
-  query: string
+  query: string,
+  getPokemonData: (name: string) => any
 ): Pokémon[] {
   const values = Object.values(data);
 
   const raw = query.toLowerCase().trim();
-  const nameQuery = raw.replace(/^0+/, '') || '0';     // for numeric lookups
+  const nameQuery = raw.replace(/^0+/, "") || "0"; // for numeric lookups
   const numberQuery = /^\d+$/.test(raw) ? parseInt(raw, 10) : null;
 
   return values.filter(({ entry_number, pokemon_species }) => {
     const name = pokemon_species.name.toLowerCase();
+    const pokemonData = getPokemonData(pokemon_species.name);
+    const nationalId = pokemonData?.id;
 
     // 1) Exact match on entry number (if numeric)
     if (numberQuery !== null && entry_number === numberQuery) {
       return true;
     }
 
-    // 2) Partial match on name
+    // 2) Exact match on national ID (if numeric)
+    if (numberQuery !== null && nationalId === numberQuery) {
+      return true;
+    }
+
+    // 3) Partial match on name
     if (name.includes(raw)) {
       return true;
     }
 
-    // 3) Leading-zero normalized number as string
+    // 4) Leading-zero normalized number as string
     if (entry_number.toString() === nameQuery) {
       return true;
     }
@@ -56,17 +65,26 @@ function fetchFilteredData(
 }
 
 // Component to display individual Pokemon data with batched data
-function PokemonRow({ 
-  entry, 
-  pokemonData, 
-  speciesData, 
-  isLoading 
-}: { 
+const PokemonRow = ({
+  entry,
+  getPokemonData,
+  getSpeciesData,
+  batchLoading,
+}: {
   entry: Pokémon;
-  pokemonData?: any;
-  speciesData?: any;
-  isLoading: boolean;
-}) {
+  getPokemonData: (name: string) => any;
+  getSpeciesData: (name: string) => any;
+  batchLoading: boolean;
+}) => {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const options = useMemo(() => ({ rootMargin: '200px' }), []);
+  const isIntersecting = useIntersectionObserver(ref, options);
+
+  const pokemonName = entry.pokemon_species.name;
+  const pokemonData = getPokemonData(pokemonName);
+  const speciesData = getSpeciesData(pokemonName);
+  const nationalId = pokemonData?.id;
+
   // Use the custom hook for Pokemon state management
   const {
     spriteInfo,
@@ -74,86 +92,27 @@ function PokemonRow({
     formattedEntryNumber
   } = usePokemonState({
     entryNumber: entry.entry_number,
-    name: entry.pokemon_species.name,
-    speciesUrl: entry.pokemon_species.url,
+    name: pokemonName,
+    nationalId,
     styles
   });
 
-  // Get color from the Pokémon data
+  // Get color from the species data
   const color = speciesData?.color?.name || null;
-
-  if (isLoading) {
-    return (
-      <div key={entry.entry_number} className={`${styles['pokemon']} ${styles[color]}`}>
-        <div className={styles.checkbox} >
-          <Checkbox id={entry.entry_number} name={entry.pokemon_species.name} speciesUrl={entry.pokemon_species.url} />
-        </div>
-        <div className={styles.sprite}>
-          <div style={{ width: 64, height: 64, backgroundColor: '#f0f0f0' }}></div>
-        </div>
-        <div className={styles.info}>
-          <h3 className={styles.name}>{capitalizeFirst(entry.pokemon_species.name)}</h3>
-          <span className={styles.number}>
-            <span className={styles.hash}><span className="visually-hidden">Number</span><span role='presentation'>#</span></span>{formattedEntryNumber}
-          </span>
-        </div>
-        <span className={styles.types} aria-label="The types are loading">
-          <span 
-            className={styles['type']}
-            role="term"
-          >
-            Loading&hellip;
-          </span>
-        </span>
-        {versionClass && <div className={styles['tag-wrap']}>
-          <div className={`${styles.tag} ${versionClass}`}></div>
-        </div>}
-      </div>
-    );
-  }
-
-  // Get types from the Pokemon data
   const types = pokemonData?.types?.map((type: Types) => type.type.name) || [];
-
-  // Handle missing data gracefully
-  if (!pokemonData) {
-    return (
-      <div key={entry.entry_number} className={`${styles['pokemon']} ${styles[color]}`}>
-        <div className={styles.checkbox} >
-          <Checkbox id={entry.entry_number} name={entry.pokemon_species.name} speciesUrl={entry.pokemon_species.url} />
-        </div>
-        <div className={styles.sprite}>
-          <Image src={spriteInfo.spritePath} alt={spriteInfo.altText} height={64} width={64} />
-        </div>
-        <div className={styles.info}>
-          <h3 className={styles.name}>{capitalizeFirst(entry.pokemon_species.name)}</h3>
-          <span className={styles.number}>
-            <span className={styles.hash}><span className="visually-hidden">Number</span><span role='presentation'>#</span></span>{formattedEntryNumber}
-          </span>
-        </div>
-        <span className={styles.types} aria-label="Types unavailable">
-          <span 
-            className={styles['type']}
-            role="term"
-            aria-label="Missing type"
-          >
-            Unknown
-          </span>
-        </span>
-        {versionClass && <div className={styles['tag-wrap']}>
-          <div className={`${styles.tag} ${versionClass}`}></div>
-        </div>}
-      </div>
-    );
-  }
+  const isDataMissing = !pokemonData;
 
   return (
-    <div key={entry.entry_number} className={`${styles['pokemon']} ${styles[color]}`}>
+    <div ref={ref} key={entry.entry_number} className={`${styles['pokemon']} ${styles[color]}`}>
       <div className={styles.checkbox} >
-        <Checkbox id={entry.entry_number} name={entry.pokemon_species.name} speciesUrl={entry.pokemon_species.url} />
+        <Checkbox id={nationalId} name={pokemonName} />
       </div>
       <div className={styles.sprite}>
-        <Image src={spriteInfo.spritePath} alt={spriteInfo.altText} height={64} width={64} />
+        {isIntersecting ? (
+          <Image src={spriteInfo.spritePath} alt={spriteInfo.altText} height={64} width={64} />
+        ) : (
+          <Image alt="" width="64" height="64" src="/placeholder.png" />
+        )}
       </div>
       <div className={styles.info}>
         <h3 className={styles.name}>{capitalizeFirst(entry.pokemon_species.name)}</h3>
@@ -161,37 +120,48 @@ function PokemonRow({
           <span className={styles.hash}><span className="visually-hidden">Number</span><span role='presentation'>#</span></span>{formattedEntryNumber}
         </span>
       </div>
-      <span className={styles.types} aria-label={`Types: ${types.map((type: string) => capitalizeFirst(type)).join(', ')}`}>
-      {types.map((type: string) => (
-        <span 
-          key={type} 
-          className={`${styles['type']} ${styles[type]}`}
-          role="term"
-          aria-label={`${capitalizeFirst(type)} type`}
-        >
-          {capitalizeFirst(type)}
-        </span>
-      ))}
+      <span className={styles.types} aria-label={
+        batchLoading
+          ? "The types are loading"
+          : isDataMissing
+            ? "Types unavailable"
+            : `Types: ${types.map((type: string) => capitalizeFirst(type)).join(', ')}`
+      }>
+        {batchLoading ? (
+          <span className={styles['type']} role="term">Loading&hellip;</span>
+        ) : isDataMissing ? (
+          <span className={styles['type']} role="term" aria-label="Missing type">Unknown</span>
+        ) : (
+          types.map((type: string) => (
+            <span
+              key={type}
+              className={`${styles['type']} ${styles[type]}`}
+              role="term"
+              aria-label={`${capitalizeFirst(type)} type`}
+            >
+              {capitalizeFirst(type)}
+            </span>
+          ))
+        )}
       </span>
       {versionClass && <div className={styles['tag-wrap']}>
         <div className={`${styles.tag} ${versionClass}`}></div>
       </div>}
     </div>
   );
-}
+};
 
 export default function List({
-  query
+  query,
+  pokemonData,
+  error,
+  isLoading,
 }: {
   query: string;
+  pokemonData: any;
+  error: any;
+  isLoading: boolean;
 }) {
-  const capitalizeFirst = (str: string) => {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  };
-
-  // Use SWR for data fetching with caching
-  const { data: pokemonData, error, isLoading } = useSWR('https://pokeapi.co/api/v2/pokedex/31/');
-
   // Get Pokemon entries for batched data fetching
   const pokemonEntries = pokemonData?.pokemon_entries || [];
   
@@ -205,7 +175,7 @@ export default function List({
 
   // Filter Pokemon based on query
   const pokémon = pokemonData?.pokemon_entries || {};
-  const filteredPokémon = fetchFilteredData(pokémon, query);
+  const filteredPokémon = fetchFilteredData(pokémon, query, getPokemonData);
 
   if (isLoading) {
     return (
@@ -246,9 +216,15 @@ export default function List({
         </thead>
       </table>
       <div className="view" role="list">
-      {filteredPokémon.map((entry: Pokémon) => (
-        <PokemonRow key={entry.entry_number} entry={entry} />
-      ))}
+        {filteredPokémon.map((entry) => (
+          <PokemonRow
+            key={entry.entry_number}
+            entry={entry}
+            getPokemonData={getPokemonData}
+            getSpeciesData={getSpeciesData}
+            batchLoading={batchLoading}
+          />
+        ))}
       </div>
     </div>
   )

@@ -11,9 +11,9 @@ interface PokemonSpriteInfo {
 }
 
 interface PokemonInfo {
-  entryNumber: number;
+  entryNumber: number; // Kept for version class and formatting
   name: string;
-  speciesUrl: string;
+  nationalId: number | null;
   styles?: { [key: string]: string }; // CSS modules styles object
 }
 
@@ -22,12 +22,14 @@ const SCARLET_POKEMON = [143, 144, 166, 226, 227, 313, 316, 317, 318, 319, 337, 
 const VIOLET_POKEMON = [114, 115, 139, 140, 167, 276, 277, 278, 305, 306, 307, 314, 320, 339, 340, 382, 383, 384, 385, 386, 387, 398, 400];
 
 export function usePokemonState(pokemonInfo: PokemonInfo) {
+  const { entryNumber, name, nationalId, styles } = pokemonInfo;
   const [pokemonState, setPokemonState] = useState<PokemonState>('none');
 
   // Update state when localStorage changes
   useEffect(() => {
     const updateState = () => {
-      const currentState = CaughtManager.getPokemonState(pokemonInfo.entryNumber);
+      if (nationalId === null) return;
+      const currentState = CaughtManager.getPokemonState(nationalId);
       setPokemonState(currentState);
     };
 
@@ -46,48 +48,59 @@ export function usePokemonState(pokemonInfo: PokemonInfo) {
       window.removeEventListener('pokemon-caught-updated', handleStateChange);
       window.removeEventListener('storage', handleStateChange);
     };
-  }, [pokemonInfo.entryNumber]);
+  }, [nationalId]); // Dependency array includes relevant info
 
   // Memoized sprite info that updates when state changes
   const spriteInfo = useMemo((): PokemonSpriteInfo => {
     const isShiny = pokemonState === 'shiny';
-    const pokemonId = pokemonInfo.speciesUrl.split('/')[6];
     
+    if (nationalId === null) {
+      return {
+        pokemonState,
+        isShiny,
+        spritePath: '/placeholder.png',
+        altText: 'Loading sprite',
+      };
+    }
+
     const spritePath = isShiny 
-      ? `https://raw.githubusercontent.com/PokeAPI/sprites/refs/heads/master/sprites/pokemon/other/home/shiny/${pokemonId}.png`
-      : `https://raw.githubusercontent.com/PokeAPI/sprites/refs/heads/master/sprites/pokemon/other/home/${pokemonId}.png`;
+      ? `https://raw.githubusercontent.com/PokeAPI/sprites/refs/heads/master/sprites/pokemon/other/home/shiny/${nationalId}.png`
+      : `https://raw.githubusercontent.com/PokeAPI/sprites/refs/heads/master/sprites/pokemon/other/home/${nationalId}.png`;
     
-    const altText = `${pokemonInfo.name}${isShiny ? ' shiny' : ''} sprite`;
+    const altText = `${name}${isShiny ? ' shiny' : ''} sprite`;
     
     return { pokemonState, isShiny, spritePath, altText };
-  }, [pokemonState, pokemonInfo.speciesUrl, pokemonInfo.name]);
+  }, [pokemonState, name, nationalId]);
 
   // Helper function to get version class
   const getVersionClass = (): string => {
-    if (SCARLET_POKEMON.includes(pokemonInfo.entryNumber)) {
-      return pokemonInfo.styles?.scarlet || 'scarlet';
+    if (SCARLET_POKEMON.includes(entryNumber)) {
+      return styles?.scarlet || 'scarlet';
     }
-    if (VIOLET_POKEMON.includes(pokemonInfo.entryNumber)) {
-      return pokemonInfo.styles?.violet || 'violet';
+    if (VIOLET_POKEMON.includes(entryNumber)) {
+      return styles?.violet || 'violet';
     }
     return '';
   };
 
   // Helper function to format entry number
   const formatEntryNumber = (): string => {
-    return `${pokemonInfo.entryNumber < 10 ? '0' : ''}${pokemonInfo.entryNumber < 100 ? '0' : ''}${pokemonInfo.entryNumber}`;
+    return `${entryNumber < 10 ? '0' : ''}${entryNumber < 100 ? '0' : ''}${entryNumber}`;
   };
 
   // Function to cycle through states
   const cycleState = () => {
+    if (nationalId === null) return;
     const nextState = pokemonState === 'none' ? 'caught' : pokemonState === 'caught' ? 'shiny' : 'none';
     setPokemonState(nextState);
     
-    // Update localStorage
+    // Update localStorage using National ID
+    const localStorageKey = `pokemon-caught-${String(nationalId).padStart(3, '0')}`;
+
     if (nextState !== 'none') {
-      localStorage.setItem(`pokemon-caught-${String(pokemonInfo.entryNumber).padStart(3, '0')}`, nextState);
+      localStorage.setItem(localStorageKey, nextState);
     } else {
-      localStorage.removeItem(`pokemon-caught-${String(pokemonInfo.entryNumber).padStart(3, '0')}`);
+      localStorage.removeItem(localStorageKey);
     }
     
     // Dispatch event to notify other components
@@ -96,13 +109,16 @@ export function usePokemonState(pokemonInfo: PokemonInfo) {
 
   // Function to set specific state
   const setState = (newState: PokemonState) => {
+    if (nationalId === null) return;
     setPokemonState(newState);
     
-    // Update localStorage
+    // Update localStorage using National ID
+    const localStorageKey = `pokemon-caught-${String(nationalId).padStart(3, '0')}`;
+
     if (newState !== 'none') {
-      localStorage.setItem(`pokemon-caught-${String(pokemonInfo.entryNumber).padStart(3, '0')}`, newState);
+      localStorage.setItem(localStorageKey, newState);
     } else {
-      localStorage.removeItem(`pokemon-caught-${String(pokemonInfo.entryNumber).padStart(3, '0')}`);
+      localStorage.removeItem(localStorageKey);
     }
     
     // Dispatch event to notify other components
@@ -126,4 +142,4 @@ export function usePokemonState(pokemonInfo: PokemonInfo) {
     cycleState,
     setState,
   };
-} 
+}

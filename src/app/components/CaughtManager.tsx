@@ -66,6 +66,7 @@ export const CaughtManager = {
     for (let i = 1; i <= MAX_POKEMON; i++) {
       localStorage.setItem(CaughtManager.getStorageKey(i), 'caught');
     }
+    window.dispatchEvent(new CustomEvent('pokemon-caught-updated'));
   },
 
   // Mark all Pokemon as not caught
@@ -73,6 +74,7 @@ export const CaughtManager = {
     for (let i = 1; i <= MAX_POKEMON; i++) {
       localStorage.removeItem(CaughtManager.getStorageKey(i));
     }
+    window.dispatchEvent(new CustomEvent('pokemon-caught-updated'));
   },
 
   // Mark Pokemon in a range as caught (regular)
@@ -80,6 +82,7 @@ export const CaughtManager = {
     for (let i = start; i <= end; i++) {
       localStorage.setItem(CaughtManager.getStorageKey(i), 'caught');
     }
+    window.dispatchEvent(new CustomEvent('pokemon-caught-updated'));
   },
 
   // Mark Pokemon in a range as shiny
@@ -87,6 +90,7 @@ export const CaughtManager = {
     for (let i = start; i <= end; i++) {
       localStorage.setItem(CaughtManager.getStorageKey(i), 'shiny');
     }
+    window.dispatchEvent(new CustomEvent('pokemon-caught-updated'));
   },
 
   // Export caught data as JSON
@@ -108,6 +112,7 @@ export const CaughtManager = {
             localStorage.setItem(CaughtManager.getStorageKey(parseInt(id)), state as 'caught' | 'shiny');
           }
         });
+        window.dispatchEvent(new CustomEvent('pokemon-caught-updated'));
         return true;
       }
       return false;
@@ -116,4 +121,4 @@ export const CaughtManager = {
       return false;
     }
   }
-}; 
+};

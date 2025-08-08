@@ -1,15 +1,14 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import styles from './Checkbox.module.css';
-import { usePokemonState, PokemonState } from '../hooks/usePokemonState';
+import { CaughtManager } from './CaughtManager';
+import { PokemonState } from '../hooks/usePokemonState';
 
 // The Checkbox component's props
 interface CheckboxProps {
   id: string | number;
   name?: string;
-  speciesUrl?: string;
-  state?: PokemonState; // The initial state of the checkbox
-  onChange?: (state: PokemonState) => void; // The function to call when the state changes
   className?: string;
 }
 
@@ -28,44 +27,58 @@ const Icon = ({ state }: { state: PokemonState }) => {
 export default function Checkbox({
   id,
   name = '',
-  speciesUrl = '',
-  state: initialState,
-  onChange,
   className = '',
 }: CheckboxProps) {
-  // Use the custom hook for Pokemon state management
-  const { pokemonState, cycleState } = usePokemonState({
-    entryNumber: Number(id),
-    name,
-    speciesUrl,
-  });
+  const [pokemonState, setPokemonState] = useState<PokemonState>('none');
 
-  // Use the hook's state if no initial state is provided
-  const currentState = initialState ?? pokemonState;
+  useEffect(() => {
+    const updateState = () => {
+      if (id === undefined || id === null) return;
+      const currentState = CaughtManager.getPokemonState(Number(id));
+      setPokemonState(currentState);
+    };
+
+    updateState();
+
+    const handleStateChange = () => {
+      updateState();
+    };
+
+    window.addEventListener('pokemon-caught-updated', handleStateChange);
+    window.addEventListener('storage', handleStateChange);
+
+    return () => {
+      window.removeEventListener('pokemon-caught-updated', handleStateChange);
+      window.removeEventListener('storage', handleStateChange);
+    };
+  }, [id]);
 
   // The function to call when the button is clicked
   const handleClick = () => {
-    if (onChange) {
-      const nextState = currentState === 'none' ? 'caught' : currentState === 'caught' ? 'shiny' : 'none';
-      onChange(nextState);
+    if (id === undefined || id === null) return;
+    const nextState = pokemonState === 'none' ? 'caught' : pokemonState === 'caught' ? 'shiny' : 'none';
+    const key = CaughtManager.getStorageKey(Number(id));
+    if (nextState === 'none') {
+      localStorage.removeItem(key);
     } else {
-      cycleState();
+      localStorage.setItem(key, nextState);
     }
+    window.dispatchEvent(new CustomEvent('pokemon-caught-updated'));
   };
 
   // The label for the button
-  const label = `Mark ${id} as ${
-    currentState === 'none' ? 'caught' : currentState === 'caught' ? 'shiny' : 'not caught'
+  const label = `Mark ${name} as ${
+    pokemonState === 'none' ? 'caught' : pokemonState === 'caught' ? 'shiny' : 'not caught'
   }`;
 
   return (
     <button
       type="button"
       onClick={handleClick}
-      className={`${className} ${styles.checkbox} ${styles[currentState]}`}
+      className={`${className} ${styles.checkbox} ${styles[pokemonState]}`}
       aria-label={label}
     >
-      <Icon state={currentState} />
+      <Icon state={pokemonState} />
     </button>
   );
 }
