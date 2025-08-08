@@ -1,7 +1,7 @@
 'use client';
 
 import styles from "../../page.module.css";
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import useSWR, { useSWRConfig } from 'swr';
 import { Search } from "../../components/search";
@@ -10,8 +10,13 @@ import Stats from "../../components/Stats";
 import SWRProvider from "../../components/SWRProvider";
 import Tabs from '../../components/Tabs';
 import { pokedexes } from '../../lib/constants';
+import { CaughtManager } from '../../components/CaughtManager';
 
 function PokedexView() {
+  useEffect(() => {
+    CaughtManager.initialize();
+  }, []);
+
   const router = useRouter();
   const params = useParams();
   const searchParams = useSearchParams();

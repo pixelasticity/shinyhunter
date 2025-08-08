@@ -74,37 +74,13 @@ export function usePokemonState(pokemonInfo: PokemonInfo) {
   const cycleState = () => {
     if (nationalId === null) return;
     const nextState = pokemonState === 'none' ? 'caught' : pokemonState === 'caught' ? 'shiny' : 'none';
-    setPokemonState(nextState);
-    
-    // Update localStorage using National ID
-    const localStorageKey = `pokemon-caught-${String(nationalId).padStart(3, '0')}`;
-
-    if (nextState !== 'none') {
-      localStorage.setItem(localStorageKey, nextState);
-    } else {
-      localStorage.removeItem(localStorageKey);
-    }
-    
-    // Dispatch event to notify other components
-    window.dispatchEvent(new CustomEvent('pokemon-caught-updated'));
+    CaughtManager.setPokemonState(nationalId, nextState);
   };
 
   // Function to set specific state
   const setState = (newState: PokemonState) => {
     if (nationalId === null) return;
-    setPokemonState(newState);
-    
-    // Update localStorage using National ID
-    const localStorageKey = `pokemon-caught-${String(nationalId).padStart(3, '0')}`;
-
-    if (newState !== 'none') {
-      localStorage.setItem(localStorageKey, newState);
-    } else {
-      localStorage.removeItem(localStorageKey);
-    }
-    
-    // Dispatch event to notify other components
-    window.dispatchEvent(new CustomEvent('pokemon-caught-updated'));
+    CaughtManager.setPokemonState(nationalId, newState);
   };
 
   return {

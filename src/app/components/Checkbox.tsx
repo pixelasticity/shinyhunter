@@ -57,13 +57,7 @@ export default function Checkbox({
   const handleClick = () => {
     if (id === undefined || id === null) return;
     const nextState = pokemonState === 'none' ? 'caught' : pokemonState === 'caught' ? 'shiny' : 'none';
-    const key = CaughtManager.getStorageKey(Number(id));
-    if (nextState === 'none') {
-      localStorage.removeItem(key);
-    } else {
-      localStorage.setItem(key, nextState);
-    }
-    window.dispatchEvent(new CustomEvent('pokemon-caught-updated'));
+    CaughtManager.setPokemonState(Number(id), nextState);
   };
 
   // The label for the button

@@ -1,117 +1,166 @@
 'use client';
 
-// type PokemonState = 'caught' | 'shiny';
-// type StateMap = Record<number, PokemonState>;
+import { PokemonState } from '../lib/types';
 
-const KEY_PREFIX = 'pokemon-caught-';
+const STORAGE_KEY = 'pokemon-caught-states';
 const MAX_POKEMON = 1025; // up to Gen IX
+const BITS_PER_POKEMON = 2;
+const POKEMON_PER_INT = 16;
+
+const stateToBits: { [key in PokemonState]: number } = {
+  none: 0,
+  caught: 1,
+  shiny: 2,
+};
+
+const bitsToState: { [key: number]: PokemonState } = {
+  0: 'none',
+  1: 'caught',
+  2: 'shiny',
+};
+
+const base64ToUint32Array = (base64: string): Uint32Array => {
+  try {
+    const binary = atob(base64);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i+=1) {
+      bytes[i] = binary.charCodeAt(i);
+    }
+    return new Uint32Array(bytes.buffer);
+  } catch (e) {
+    console.error("Failed to decode base64 string from localStorage", e);
+    return new Uint32Array(Math.ceil(MAX_POKEMON / POKEMON_PER_INT));
+  }
+};
+
+const uint32ArrayToBase64 = (array: Uint32Array): string => {
+  const bytes = new Uint8Array(array.buffer);
+  let binary = '';
+  for (let i = 0; i < bytes.length; i+=1) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return btoa(binary);
+};
 
 // Utility functions for managing caught Pokemon state
 export const CaughtManager = {
-  // Helper function to pad Pokemon ID with leading zeros
-  getStorageKey: (pokemonId: number) => {
-    return `${KEY_PREFIX}${String(pokemonId).padStart(3, '0')}`;
+  initialize: () => {
+    // No-op, since we are not migrating data
   },
 
-  // Get all Pokemon with their states
-  getPokemonStates: (): { [key: number]: 'caught' | 'shiny' } => {
-    const states: { [key: number]: 'caught' | 'shiny' } = {};
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      if (key?.startsWith(KEY_PREFIX)) {
-        const id = parseInt(key.replace(KEY_PREFIX, ''));
-        const state = localStorage.getItem(key) as 'caught' | 'shiny';
-        if (state) {
-          states[id] = state;
-        }
+  getPokemonStates: (): Uint32Array => {
+    const base64 = localStorage.getItem(STORAGE_KEY);
+    if (base64) {
+      return base64ToUint32Array(base64);
+    }
+    const array = new Uint32Array(Math.ceil(MAX_POKEMON / POKEMON_PER_INT));
+    return array;
+  },
+
+  setPokemonState: (id: number, state: PokemonState) => {
+    const states = CaughtManager.getPokemonStates();
+    const index = Math.floor((id - 1) / POKEMON_PER_INT);
+    const bitPosition = ((id - 1) % POKEMON_PER_INT) * BITS_PER_POKEMON;
+    const bits = stateToBits[state];
+
+    states[index] =
+      (states[index] & ~(3 << bitPosition)) | (bits << bitPosition);
+
+    localStorage.setItem(STORAGE_KEY, uint32ArrayToBase64(states));
+    window.dispatchEvent(new CustomEvent('pokemon-caught-updated'));
+  },
+
+  getCaughtPokemon: (): number[] => {
+    const states = CaughtManager.getPokemonStates();
+    const caught: number[] = [];
+    for (let i = 1; i <= MAX_POKEMON; i++) {
+      if (CaughtManager.getPokemonState(i, states) !== 'none') {
+        caught.push(i);
       }
     }
-    return states;
+    return caught;
   },
 
-  // Get all caught Pokemon IDs (both regular and shiny)
-  getCaughtPokemon: (): number[] => {
-    return Object.keys(CaughtManager.getPokemonStates()).map(Number).sort((a, b) => a - b);
-  },
-
-  // Get only shiny Pokemon IDs
   getShinyPokemon: (): number[] => {
     const states = CaughtManager.getPokemonStates();
-    return Object.entries(states)
-      .filter(([, state]) => state === 'shiny')
-      .map(([id]) => parseInt(id))
-      .sort((a, b) => a - b);
+    const shiny: number[] = [];
+    for (let i = 1; i <= MAX_POKEMON; i++) {
+      if (CaughtManager.getPokemonState(i, states) === 'shiny') {
+        shiny.push(i);
+      }
+    }
+    return shiny;
   },
 
-  // Get total count of caught Pokemon (both regular and shiny)
   getCaughtCount: (): number => {
     return CaughtManager.getCaughtPokemon().length;
   },
 
-  // Get count of only shiny Pokemon
   getShinyCount: (): number => {
     return CaughtManager.getShinyPokemon().length;
   },
 
-  // Get Pokemon state
-  getPokemonState: (id: number): 'none' | 'caught' | 'shiny' => {
-    const savedState = localStorage.getItem(CaughtManager.getStorageKey(id));
-    return savedState as 'caught' | 'shiny' || 'none';
+  getPokemonState: (id: number, states?: Uint32Array): PokemonState => {
+    states = states || CaughtManager.getPokemonStates();
+    const index = Math.floor((id - 1) / POKEMON_PER_INT);
+    const bitPosition = ((id - 1) % POKEMON_PER_INT) * BITS_PER_POKEMON;
+    const bits = (states[index] >> bitPosition) & 3;
+    return bitsToState[bits] || 'none';
   },
 
-  // Mark all Pokemon as caught (regular)
   catchAll: (): void => {
-    // This would need to be called with the total number of Pokemon
-    // For now, we'll use a reasonable upper bound
+    const states = new Uint32Array(Math.ceil(MAX_POKEMON / POKEMON_PER_INT));
     for (let i = 1; i <= MAX_POKEMON; i++) {
-      localStorage.setItem(CaughtManager.getStorageKey(i), 'caught');
+      const index = Math.floor((i - 1) / POKEMON_PER_INT);
+      const bitPosition = ((i - 1) % POKEMON_PER_INT) * BITS_PER_POKEMON;
+      states[index] |= 1 << bitPosition;
     }
+    localStorage.setItem(STORAGE_KEY, uint32ArrayToBase64(states));
     window.dispatchEvent(new CustomEvent('pokemon-caught-updated'));
   },
 
-  // Mark all Pokemon as not caught
   releaseAll: (): void => {
-    for (let i = 1; i <= MAX_POKEMON; i++) {
-      localStorage.removeItem(CaughtManager.getStorageKey(i));
-    }
+    localStorage.removeItem(STORAGE_KEY);
     window.dispatchEvent(new CustomEvent('pokemon-caught-updated'));
   },
 
-  // Mark Pokemon in a range as caught (regular)
   catchRange: (start: number, end: number): void => {
+    const states = CaughtManager.getPokemonStates();
     for (let i = start; i <= end; i++) {
-      localStorage.setItem(CaughtManager.getStorageKey(i), 'caught');
+      const index = Math.floor((i - 1) / POKEMON_PER_INT);
+      const bitPosition = ((i - 1) % POKEMON_PER_INT) * BITS_PER_POKEMON;
+      states[index] =
+        (states[index] & ~(3 << bitPosition)) | (1 << bitPosition);
     }
+    localStorage.setItem(STORAGE_KEY, uint32ArrayToBase64(states));
     window.dispatchEvent(new CustomEvent('pokemon-caught-updated'));
   },
 
-  // Mark Pokemon in a range as shiny
   shinyRange: (start: number, end: number): void => {
+    const states = CaughtManager.getPokemonStates();
     for (let i = start; i <= end; i++) {
-      localStorage.setItem(CaughtManager.getStorageKey(i), 'shiny');
+      const index = Math.floor((i - 1) / POKEMON_PER_INT);
+      const bitPosition = ((i - 1) % POKEMON_PER_INT) * BITS_PER_POKEMON;
+      states[index] =
+        (states[index] & ~(3 << bitPosition)) | (2 << bitPosition);
     }
+    localStorage.setItem(STORAGE_KEY, uint32ArrayToBase64(states));
     window.dispatchEvent(new CustomEvent('pokemon-caught-updated'));
   },
 
-  // Export caught data as JSON
   exportData: (): string => {
     const states = CaughtManager.getPokemonStates();
-    return JSON.stringify({ states, timestamp: new Date().toISOString() });
+    return JSON.stringify({
+      timestamp: new Date().toISOString(),
+      data: uint32ArrayToBase64(states),
+    });
   },
 
-  // Import caught data from JSON
   importData: (jsonData: string): boolean => {
     try {
       const data = JSON.parse(jsonData);
-      if (data.states && typeof data.states === 'object') {
-        // Clear existing data
-        CaughtManager.releaseAll();
-        // Set new data
-        Object.entries(data.states).forEach(([id, state]) => {
-          if (state === 'caught' || state === 'shiny') {
-            localStorage.setItem(CaughtManager.getStorageKey(parseInt(id)), state as 'caught' | 'shiny');
-          }
-        });
+      if (data.data && typeof data.data === 'string') {
+        localStorage.setItem(STORAGE_KEY, data.data);
         window.dispatchEvent(new CustomEvent('pokemon-caught-updated'));
         return true;
       }
@@ -120,5 +169,5 @@ export const CaughtManager = {
       console.error('Failed to import data:', error);
       return false;
     }
-  }
+  },
 };
