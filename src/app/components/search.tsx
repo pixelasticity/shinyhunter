@@ -43,7 +43,6 @@ function SearchForm({ placeholder }: { placeholder: string }) {
             alt="Search"
             width={24}
             height={24}
-            priority
             />
         </button>
       </div>
