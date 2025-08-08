@@ -1,0 +1,15 @@
+.tab {
+  padding: 10px 20px;
+  border: 1px solid #ccc;
+  border-bottom-width: 0;
+  background-color: var(--ui-background);
+  cursor: pointer;
+  margin-right: 5px;
+  border-radius: 5px 5px 0 0;
+}
+
+.tab.active {
+  background-color: var(--background);
+  position: relative;
+  bottom: -1px;
+}
