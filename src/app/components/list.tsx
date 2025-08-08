@@ -175,7 +175,7 @@ export default function List({
 
   // Filter Pokemon based on query
   const pokémon = pokemonData?.pokemon_entries || {};
-  const filteredPokémon = fetchFilteredData(pokémon, query, getPokemonData);
+  const filteredPokémon = useMemo(() => fetchFilteredData(pokémon, query, getPokemonData), [pokémon, query, getPokemonData]);
 
   if (isLoading) {
     return (
