@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { CaughtManager } from './CaughtManager';
 import styles from './Stats.module.css';
 
@@ -22,13 +22,15 @@ export default function Stats({ pokemonEntries, className = '' }: StatsProps) {
   const [caughtPokemon, setCaughtPokemon] = useState<number[]>([]);
   const totalPokemon = pokemonEntries.length;
 
+  const nationalIds = useMemo(() => {
+    return pokemonEntries.map(entry => {
+      const urlParts = entry.pokemon_species.url.split('/');
+      return parseInt(urlParts[urlParts.length - 2]);
+    });
+  }, [pokemonEntries]);
+
   useEffect(() => {
     const updateStats = () => {
-      const nationalIds = pokemonEntries.map(entry => {
-        const urlParts = entry.pokemon_species.url.split('/');
-        return parseInt(urlParts[urlParts.length - 2]);
-      });
-
       const caught = nationalIds.filter(id => {
         const state = CaughtManager.getPokemonState(id);
         return state === 'caught' || state === 'shiny';
@@ -61,7 +63,7 @@ export default function Stats({ pokemonEntries, className = '' }: StatsProps) {
       window.removeEventListener('storage', handleStorageChange);
       window.removeEventListener('pokemon-caught-updated', handleStorageChange);
     };
-  }, [pokemonEntries]);
+  }, [nationalIds]);
 
   const percentage = totalPokemon > 0 ? ((caughtCount / totalPokemon) * 100).toFixed(1) : 0;
 
