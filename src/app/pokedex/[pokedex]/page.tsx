@@ -9,12 +9,7 @@ import List from "../../components/list";
 import Stats from "../../components/Stats";
 import SWRProvider from "../../components/SWRProvider";
 import Tabs from '../../components/Tabs';
-
-const pokedexes = [
-  { label: 'Paldea', url: '/api/pokemon/pokedex/31/', name: 'paldea' },
-  { label: 'Kitakami', url: '/api/pokemon/pokedex/32/', name: 'kitakami' },
-  { label: 'Blueberry Academy', url: '/api/pokemon/pokedex/33/', name: 'blueberry-academy' },
-];
+import { pokedexes } from '../../lib/constants';
 
 function PokedexView() {
   const router = useRouter();
