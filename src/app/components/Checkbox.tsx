@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import styles from './Checkbox.module.css';
 import { CaughtManager } from './CaughtManager';
-import { PokemonState } from '../hooks/usePokemonState';
+import { PokemonState } from '../lib/types';
 
 // The Checkbox component's props
 interface CheckboxProps {

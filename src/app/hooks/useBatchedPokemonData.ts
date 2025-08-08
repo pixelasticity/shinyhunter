@@ -1,23 +1,6 @@
 import { useMemo } from 'react';
 import useSWR from 'swr';
-
-type PokemonEntry = {
-  entry_number: number;
-  pokemon_species: {
-    name: string;
-    url: string;
-  };
-};
-
-type PokemonData = {
-  types: Array<{ type: { name: string } }>;
-  id: number;
-};
-
-type SpeciesData = {
-  color: { name: string };
-  id: number;
-};
+import { PokemonEntry, PokemonData, SpeciesData } from '../lib/types';
 
 const batchFetcher = async (urls: string[]): Promise<any[]> => {
   if (urls.length === 0) {

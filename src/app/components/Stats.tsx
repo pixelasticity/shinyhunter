@@ -3,18 +3,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { CaughtManager } from './CaughtManager';
 import styles from './Stats.module.css';
-
-interface PokemonEntry {
-  pokemon_species: {
-    name: string;
-    url: string;
-  };
-}
-
-interface StatsProps {
-  pokemonEntries: PokemonEntry[];
-  className?: string;
-}
+import { PokemonEntry, StatsProps } from '../lib/types';
 
 export default function Stats({ pokemonEntries, className = '' }: StatsProps) {
   const [caughtCount, setCaughtCount] = useState(0);

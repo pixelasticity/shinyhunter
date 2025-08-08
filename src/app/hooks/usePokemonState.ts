@@ -1,22 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { CaughtManager } from '../components/CaughtManager';
 import { SCARLET_POKEMON, VIOLET_POKEMON } from '../lib/constants';
-
-export type PokemonState = 'none' | 'caught' | 'shiny';
-
-interface PokemonSpriteInfo {
-  pokemonState: PokemonState;
-  isShiny: boolean;
-  spritePath: string;
-  altText: string;
-}
-
-interface PokemonInfo {
-  entryNumber: number; // Kept for version class and formatting
-  name: string;
-  nationalId: number | null;
-  styles?: { [key: string]: string }; // CSS modules styles object
-}
+import { PokemonState, PokemonSpriteInfo, PokemonInfo } from '../lib/types';
 
 export function usePokemonState(pokemonInfo: PokemonInfo) {
   const { entryNumber, name, nationalId, styles } = pokemonInfo;

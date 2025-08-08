@@ -9,26 +9,13 @@ import { useBatchedPokemonData } from '../hooks/useBatchedPokemonData';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 import { capitalizeFirst } from '../lib/utils';
 import ListSkeleton from './skeletons';
-
-type Pokémon = {
-  entry_number: number,
-  pokemon_species: {
-    name: string,
-    url: string
-  }
-}
-
-type Types = {
-  type: {
-    name: string
-  }
-}
+import { PokemonEntry, Types } from '../lib/types';
 
 function fetchFilteredData(
-  data: Record<string, Pokémon>,
+  data: Record<string, PokemonEntry>,
   query: string,
   getPokemonData: (name: string) => any
-): Pokémon[] {
+): PokemonEntry[] {
   const values = Object.values(data);
 
   const raw = query.toLowerCase().trim();
@@ -71,7 +58,7 @@ const PokemonRow = ({
   getSpeciesData,
   batchLoading,
 }: {
-  entry: Pokémon;
+  entry: PokemonEntry;
   getPokemonData: (name: string) => any;
   getSpeciesData: (name: string) => any;
   batchLoading: boolean;
