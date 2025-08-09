@@ -36,6 +36,7 @@ function SearchForm({ placeholder }: { placeholder: string }) {
           defaultValue={searchParams.get('query')?.toString()}
           aria-describedby="search-description"
         />
+        {searchParams.get('query') && <input type="reset" value="Clear" className={styles.reset} accessKey="r" onClick={() => handleSearch('')} />}
         <button type="submit" className={styles.submit}>
           <Image
             className={styles.icon}
