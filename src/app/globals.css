@@ -1,6 +1,7 @@
 :root {
   --background: #fefefe;
   --foreground: #1a1a1a;
+  --gray: #5e727d;
 
   /* Pokemon Type Colors */
   --type-normal: #ccc;
