@@ -2,5 +2,4 @@
   display: flex;
   margin-bottom: 20px;
   background-color: var(--ui-background);
-  border-bottom: 1px solid var(--checkbox-border);
 }

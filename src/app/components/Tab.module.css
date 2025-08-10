@@ -1,15 +1,39 @@
 .tab {
-  padding: 10px 20px;
-  border: 1px solid #ccc;
-  border-bottom-width: 0;
-  background-color: var(--ui-background);
+  position: relative;
+  font-size: 1.35em;
+  line-height: 1.222222;
+  background-color: transparent;
+  padding: 0.5em 1.5em 0.5em 0.75em;
+  border: 0;
   cursor: pointer;
-  margin-right: 5px;
-  border-radius: 5px 5px 0 0;
+  z-index: 0
+    /* clip-path: polygon(10.471204% 0%, 89.528796% 0%, 100% 100%, 0% 100%); */
 }
 
-.tab.active {
+.tab::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  border-bottom: none;
+  background: rgba(255 255 255 / 0%);
+  box-shadow: 0 2px hsla(0,0%,100%,.5) inset;
+  transform: perspective(5px) skew(17deg);
+  transform-origin: bottom;
+}
+
+.tab:first-child {
+  padding-left: 1.5em;
+  clip-path: polygon(10.471204% 0%, 100% 0%, 100% 100%, 0% 100%);
+}
+
+.tab:last-child::before {
+  background-color: rgba(255 255 255 / 20%);
+}
+
+.tab.active::before {
   background-color: var(--background);
-  position: relative;
-  bottom: -1px;
 }
