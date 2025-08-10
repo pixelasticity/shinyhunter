@@ -54,7 +54,13 @@ export default function PokemonRow({
       </div>
       <div className={styles.sprite}>
         {isIntersecting ? (
-          <Image src={spriteInfo.spritePath} alt={spriteInfo.altText} height={64} width={64} />
+          <Image
+            src={spriteInfo.spritePath}
+            alt={spriteInfo.altText}
+            height={64}
+            width={64}
+            priority={entry.entry_number <= 20} // Prioritize first 20 images for LCP
+          />
         ) : (
           <Image alt="" width="64" height="64" src="/placeholder.png" />
         )}
