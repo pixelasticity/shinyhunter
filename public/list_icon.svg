@@ -1,0 +1,9 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg" xml:space="preserve">
+ <g>
+  <title>Layer 1</title>
+  <rect x="32" y="32" width="448" height="128" id="svg_10" rx="64"/>
+  <rect x="32" y="192" width="448" height="128" id="svg_11" rx="64"/>
+  <rect x="32" y="352" width="448" height="128" id="svg_12" rx="64"/>
+ </g>
+
+</svg>
