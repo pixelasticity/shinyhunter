@@ -53,11 +53,13 @@ export default function List({
   pokemonData,
   error,
   isLoading,
+  viewMode,
 }: {
   query: string;
   pokemonData: any;
   error: any;
   isLoading: boolean;
+  viewMode: 'list' | 'grid';
 }) {
   // Get Pokemon entries for batched data fetching
   const pokemonEntries = pokemonData?.pokemon_entries || [];
@@ -112,7 +114,7 @@ export default function List({
           </tr>
         </thead>
       </table>
-      <div className="view" role="list">
+      <div className={`${styles.view} ${viewMode === 'grid' ? styles['grid-view'] : ''}`} role="list">
         {filteredPokémon.map((entry) => (
           <PokemonRow
             key={entry.entry_number}
