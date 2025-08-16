@@ -10,9 +10,12 @@ export function usePokemonState(pokemonInfo: PokemonInfo) {
   // Update state when localStorage changes
   useEffect(() => {
     const updateState = () => {
-      if (nationalId === null) return;
-      const currentState = CaughtManager.getPokemonState(nationalId);
-      setPokemonState(currentState);
+      if (nationalId != null) {
+        const currentState = CaughtManager.getPokemonState(nationalId);
+        setPokemonState(currentState);
+      } else {
+        return;
+      }
     };
 
     // Set initial state
@@ -72,15 +75,21 @@ export function usePokemonState(pokemonInfo: PokemonInfo) {
 
   // Function to cycle through states
   const cycleState = () => {
-    if (nationalId === null) return;
-    const nextState = pokemonState === 'none' ? 'caught' : pokemonState === 'caught' ? 'shiny' : 'none';
-    CaughtManager.setPokemonState(nationalId, nextState);
+    if (nationalId != null) {
+      const nextState = pokemonState === 'none' ? 'caught' : pokemonState === 'caught' ? 'shiny' : 'none';
+      CaughtManager.setPokemonState(nationalId, nextState);
+    } else {
+      return;
+    }
   };
 
   // Function to set specific state
   const setState = (newState: PokemonState) => {
-    if (nationalId === null) return;
-    CaughtManager.setPokemonState(nationalId, newState);
+    if (nationalId != null) {
+      CaughtManager.setPokemonState(nationalId, newState);
+    } else {
+      return;
+    }
   };
 
   return {

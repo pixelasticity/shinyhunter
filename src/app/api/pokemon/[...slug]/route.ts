@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 
 const cache = new Map<string, any>();
 const cacheTTL = new Map<string, number>();
@@ -26,9 +26,9 @@ const fetchWithRetry = async (url: string, retries = 3, delay = 100) => {
 };
 
 export async function GET(
-  request: Request,
-  { params }: { params: { slug: string[] } }
-) {
+  request: NextRequest,
+  { params }: { params: Promise<{ slug: string[] }> }
+): Promise<NextResponse> {
   const { searchParams } = new URL(request.url);
   const urls = searchParams.get('urls');
 
@@ -51,7 +51,7 @@ export async function GET(
     }
   } else {
     // Single fetch
-    const slug = params.slug.join('/');
+    const slug = (await params).slug.join('/');
     const query = searchParams.toString();
     try {
       const data = await fetchWithRetry(`https://pokeapi.co/api/v2/${slug}?${query}`);

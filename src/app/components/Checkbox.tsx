@@ -10,6 +10,7 @@ interface CheckboxProps {
   id: string | number;
   name?: string;
   className?: string;
+  speciesUrl?: string;
 }
 
 // The Icon component to display the checkmark and star icons

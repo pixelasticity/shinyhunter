@@ -28,7 +28,8 @@ export interface PokemonSpriteInfo {
 export interface PokemonInfo {
   entryNumber: number;
   name: string;
-  nationalId: number | null;
+  speciesUrl?: string | null;
+  nationalId?: number | undefined;
   styles?: { [key: string]: string };
 }
 
