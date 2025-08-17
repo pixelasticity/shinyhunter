@@ -27,24 +27,34 @@ export function useBatchedPokemonData(pokemonEntries: PokemonEntry[]) {
     return { pokemonUrls, speciesUrls };
   }, [pokemonEntries]);
 
+  const swrOptions = {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    onErrorRetry: (error: any, key: any, config: any, revalidate: any, { retryCount }: { retryCount: number }) => {
+      // Never retry on 404.
+      if (error.status === 404) return;
+
+      // Only retry up to 3 times.
+      if (retryCount >= 3) return;
+
+      // Retry with exponential backoff.
+      const timeout = Math.pow(2, retryCount) * 1000;
+      setTimeout(() => revalidate({ retryCount }), timeout);
+    },
+  };
+
   // Fetch Pokemon data in batches
   const { data: pokemonBatchData, error: pokemonError, isLoading: pokemonLoading } = useSWR(
     pokemonUrls.length > 0 ? ['pokemon-batch', pokemonUrls] : null,
     ([, urls]) => batchFetcher(urls),
-    {
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-    }
+    swrOptions
   );
 
   // Fetch Species data in batches
   const { data: speciesBatchData, error: speciesError, isLoading: speciesLoading } = useSWR(
     speciesUrls.length > 0 ? ['species-batch', speciesUrls] : null,
     ([, urls]) => batchFetcher(urls),
-    {
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-    }
+    swrOptions
   );
 
   // Create lookup maps for easy access
