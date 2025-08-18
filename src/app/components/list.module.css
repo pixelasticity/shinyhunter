@@ -292,6 +292,16 @@
         background-position: center 100%;
         background-size: 100% 200%;
     }
+
+    .pokemon:not(.white) .number,
+    .pokemon:not(.white) .hash {
+        color: #fff;
+    }
+
+    .white .name {
+        color: #616161;
+    }
+
     .brown {
         background-color: #8d4f24;
     }
