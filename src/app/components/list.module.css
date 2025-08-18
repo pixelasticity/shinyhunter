@@ -395,6 +395,11 @@
         margin: 32px;
     }
 
+    .sprite img[alt=""] {
+        height: 64px;
+        width: 64px;
+    }
+
     .info {
         grid-area: name;
         gap: 24px;
