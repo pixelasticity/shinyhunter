@@ -69,12 +69,12 @@ export default function Stats({ pokemonEntries, className = '' }: StatsProps) {
           <div className={className}>
             <strong>{caughtCount}</strong> / {totalPokemon} Pokemon caught ({percentage}%)
           </div>
-          <div style={{ marginBottom: '10px', fontSize: '0.9em', color: 'var(--text-muted)' }}>
+          <div className={styles.shiny}>
             ✨ <strong>{shinyCount}</strong> shiny Pokemon
           </div>
           <progress className={styles.progress} max={totalPokemon} value={caughtCount}></progress>
           {caughtCount > 0 && (
-            <div style={{ marginTop: '10px', fontSize: '0.9em', color: 'var(--text-muted)' }}>
+            <div className={styles.recent}>
               Recently caught: {caughtPokemon.slice(-5).reverse().map(id => getPokemonName(id)).join(', ')}
             </div>
           )}

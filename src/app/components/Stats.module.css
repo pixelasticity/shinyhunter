@@ -30,3 +30,22 @@
   background-color: var(--ui-progress-fill);
   border-radius: 10px;
 }
+
+.shiny {
+  margin-bottom: 10px;
+  font-size: 0.9em;
+  color: var(--text-muted);
+}
+
+.recent {
+  display: none;
+  margin-top: 10px;
+  font-size: 0.9em;
+  color: var(--text-muted);
+}
+
+@media all and (width >= 600px) {
+  .recent {
+    display: block;
+  }
+}
