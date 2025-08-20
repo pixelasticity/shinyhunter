@@ -18,6 +18,16 @@ export default function Stats({ pokemonEntries, className = '' }: StatsProps) {
     });
   }, [pokemonEntries]);
 
+  const pokemonNameMap = useMemo(() => {
+    const map = new Map<number, string>();
+    pokemonEntries.forEach(entry => {
+      const urlParts = entry.pokemon_species.url.split('/');
+      const id = parseInt(urlParts[urlParts.length - 2]);
+      map.set(id, entry.pokemon_species.name);
+    });
+    return map;
+  }, [pokemonEntries]);
+
   useEffect(() => {
     const updateStats = () => {
       const caught = nationalIds.filter(id => {
@@ -58,7 +68,7 @@ export default function Stats({ pokemonEntries, className = '' }: StatsProps) {
 
   // Helper function to get Pokemon name by ID
   const getPokemonName = (id: number): string => {
-    return `#${id}`;
+    return pokemonNameMap.get(id) || `#${id}`;
   };
 
   return (
