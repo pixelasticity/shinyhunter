@@ -1,13 +1,5 @@
 .form {
-    padding-block: 1em 4em;
-    padding-inline: 12px;
-    background-color: var(--ui-background);
-}
-
-@media screen and (width = 1280px) {
-    .form {
-        clip-path: polygon(0 0, 100% 0, 100% 100%, 77.34375% 100%, 73.59375% 61.290323%, 26.40625% 61.290323%, 22.65625% 100%, 0 100%);
-    }
+    grid-column: 2 / 3;
 }
 
 .box {

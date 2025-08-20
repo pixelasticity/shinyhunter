@@ -123,6 +123,32 @@ a.secondary {
   min-width: 158px;
 }
 
+.search-and-toggle {
+    padding-block: 1em 1.25em;
+    padding-inline: 12px;
+    background-color: var(--ui-background);
+}
+
+@media all and (width >= 600px) {
+    .search-and-toggle {
+        padding-block: 1em 4em;
+    }
+}
+
+@media screen and (width = 1280px) {
+    .search-and-toggle {
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 77.34375% 100%, 73.59375% 61.290323%, 26.40625% 61.290323%, 22.65625% 100%, 0 100%);
+    }
+}
+
+@media all and (width >= 1280px) {
+  .search-and-toggle {
+    display: grid;
+    gap: 1em;
+    grid-template-columns: 1fr 72.5% 1fr;
+  }
+}
+
 .footer {
   grid-row-start: 3;
   display: flex;

@@ -28,8 +28,8 @@ export default function ViewToggle({ initialView = 'list', onViewChange }: ViewT
         <Image
           src="/list_icon.svg"
           alt="List View"
-          width={24}
-          height={24}
+          width={20}
+          height={20}
         />
       </button>
       <button
@@ -41,8 +41,8 @@ export default function ViewToggle({ initialView = 'list', onViewChange }: ViewT
         <Image
           src="/grid_icon.svg"
           alt="Grid View"
-          width={24}
-          height={24}
+          width={20}
+          height={20}
         />
       </button>
     </div>
