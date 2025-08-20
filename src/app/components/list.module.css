@@ -22,22 +22,35 @@
 
 .grid-view {
     display: grid;
-    grid-template-columns: repeat(auto-fit, 128px);
-    gap: 0;
+    grid-template-columns: repeat(auto-fit, 96px);
+    gap: 0.875em;
     justify-content: center;
-    grid-auto-rows: 128px;
-    max-width: 80%;
+    grid-auto-rows: 96px;
+    max-width: calc(100% - 2em);
     margin-inline: auto;
 }
 
 .grid-view .pokemon {
     margin: 0;
-    border-radius: 64px;
+    border-radius: 48px;
     grid-template-areas:
         "sprite" 
         "sprite";
     background-color: #eee;
     box-shadow: none;
+}
+
+@media all and (width >= 600px) {
+    .grid-view {
+        grid-template-columns: repeat(auto-fit, 128px);
+        grid-auto-rows: 128px;
+        gap: 0;
+        max-width: calc(100% - 4em);
+    }
+
+    .grid-view .pokemon {
+        border-radius: 64px;
+    }
 }
 
 .grid-view .pokemon .checkbox,
