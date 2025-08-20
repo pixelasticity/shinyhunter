@@ -18,7 +18,7 @@
     align-items: stretch;
     background-color: var(--background);
     border-radius: 8px;
-    border: 1px solid oklch(92.8% 0.006 264.531);
+    border: 1px solid var(--ui-border);
     outline: 0px solid transparent;
     transition: outline .3s ease-in-out;
 }

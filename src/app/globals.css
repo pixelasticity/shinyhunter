@@ -33,7 +33,7 @@
 
   /* UI Colors */
   --ui-background: #a4a4a4;
-  --ui-border: #ccc;
+  --ui-border: oklch(92.8% 0.006 264.531);
   --ui-border-hover: #999;
   --ui-focus: #007bff;
   --ui-success: #54b564;
