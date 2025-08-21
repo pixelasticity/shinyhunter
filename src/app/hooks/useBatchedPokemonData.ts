@@ -1,6 +1,6 @@
-import { useMemo } from 'react';
+import { useMemo, useEffect, useState } from 'react';
 import useSWR from 'swr';
-import { PokemonEntry, PokemonData, SpeciesData } from '../lib/types';
+import { PokemonEntry, PokemonData, SpeciesData, TypeData } from '../lib/types';
 
 const batchFetcher = async (urls: string[]): Promise<any[]> => {
   if (urls.length === 0) {
@@ -15,18 +15,6 @@ const batchFetcher = async (urls: string[]): Promise<any[]> => {
 };
 
 export function useBatchedPokemonData(pokemonEntries: PokemonEntry[]) {
-  // Generate all URLs we need to fetch
-  const { pokemonUrls, speciesUrls } = useMemo(() => {
-    const pokemonUrls = pokemonEntries.map(entry =>
-      entry.pokemon_species.url.replace('https://pokeapi.co/api/v2', '').replace('pokemon-species', 'pokemon')
-    );
-    const speciesUrls = pokemonEntries.map(entry => 
-      entry.pokemon_species.url.replace('https://pokeapi.co/api/v2', '')
-    );
-    
-    return { pokemonUrls, speciesUrls };
-  }, [pokemonEntries]);
-
   const swrOptions = {
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
@@ -43,16 +31,50 @@ export function useBatchedPokemonData(pokemonEntries: PokemonEntry[]) {
     },
   };
 
+  // Generate initial Pokemon and Species URLs
+  const initialPokemonUrls = useMemo(() => pokemonEntries.map(entry =>
+    entry.pokemon_species.url.replace('https://pokeapi.co/api/v2', '').replace('pokemon-species', 'pokemon')
+  ), [pokemonEntries]);
+
+  const initialSpeciesUrls = useMemo(() => pokemonEntries.map(entry =>
+    entry.pokemon_species.url.replace('https://pokeapi.co/api/v2', '')
+  ), [pokemonEntries]);
+
   // Fetch Pokemon data in batches
   const { data: pokemonBatchData, error: pokemonError, isLoading: pokemonLoading } = useSWR(
-    pokemonUrls.length > 0 ? ['pokemon-batch', pokemonUrls] : null,
+    initialPokemonUrls.length > 0 ? ['pokemon-batch', initialPokemonUrls] : null,
     ([, urls]) => batchFetcher(urls),
     swrOptions
   );
 
   // Fetch Species data in batches
   const { data: speciesBatchData, error: speciesError, isLoading: speciesLoading } = useSWR(
-    speciesUrls.length > 0 ? ['species-batch', speciesUrls] : null,
+    initialSpeciesUrls.length > 0 ? ['species-batch', initialSpeciesUrls] : null,
+    ([, urls]) => batchFetcher(urls),
+    swrOptions
+  );
+
+  // Collect unique type URLs from fetched pokemon data
+  const typeUrls = useMemo(() => {
+    const uniqueTypeUrls = new Set<string>();
+    const urls: string[] = [];
+    if (pokemonBatchData) {
+      pokemonBatchData.forEach((data: PokemonData) => {
+        data.types.forEach(typeInfo => {
+          // Ensure typeInfo.type.url is accessed safely
+          if (typeInfo.type && typeInfo.type.url && !uniqueTypeUrls.has(typeInfo.type.url)) {
+            uniqueTypeUrls.add(typeInfo.type.url);
+            urls.push(typeInfo.type.url.replace('https://pokeapi.co/api/v2', ''));
+          }
+        });
+      });
+    }
+    return urls;
+  }, [pokemonBatchData]);
+
+  // Fetch Type data in batches
+  const { data: typeBatchData, error: typeError, isLoading: typeLoading } = useSWR(
+    typeUrls.length > 0 ? ['type-batch', typeUrls] : null,
     ([, urls]) => batchFetcher(urls),
     swrOptions
   );
@@ -84,13 +106,26 @@ export function useBatchedPokemonData(pokemonEntries: PokemonEntry[]) {
     return map;
   }, [speciesBatchData, pokemonEntries]);
 
+  const typeDataMap = useMemo(() => {
+    if (!typeBatchData) return new Map();
+    
+    const map = new Map<string, TypeData>();
+    typeBatchData.forEach((data: TypeData) => {
+      if (data) {
+        map.set(data.name, data);
+      }
+    });
+    return map;
+  }, [typeBatchData]);
+
   return {
     pokemonDataMap,
     speciesDataMap,
-    isLoading: pokemonLoading || speciesLoading,
-    error: pokemonError || speciesError,
-    // Helper functions
+    typeDataMap,
+    isLoading: pokemonLoading || speciesLoading || typeLoading,
+    error: pokemonError || speciesError || typeError,
     getPokemonData: (name: string) => pokemonDataMap.get(name),
     getSpeciesData: (name: string) => speciesDataMap.get(name),
+    getTypeData: (name: string) => typeDataMap.get(name),
   };
 }
