@@ -41,35 +41,32 @@ export function useBatchedPokemonData(pokemonEntries: PokemonEntry[]) {
   ), [pokemonEntries]);
 
   // Fetch Pokemon data in batches
-  const { data: pokemonBatchData, error: pokemonError, isLoading: pokemonLoading } = useSWR(
-    initialPokemonUrls.length > 0 ? ['pokemon-batch', initialPokemonUrls] : null,
-    ([, urls]) => batchFetcher(urls),
+  const { data: pokemonBatchData, error: pokemonError, isLoading: pokemonLoading } = useSWR<PokemonData[], Error>(
+    initialPokemonUrls.length > 0 ? ['pokemon-batch', initialPokemonUrls] as const : null,
+    ([, urls]) => batchFetcher<PokemonData>(urls as string[]),
     swrOptions
   );
 
   // Fetch Species data in batches
-  const { data: speciesBatchData, error: speciesError, isLoading: speciesLoading } = useSWR(
-    initialSpeciesUrls.length > 0 ? ['species-batch', initialSpeciesUrls] : null,
-    ([, urls]) => batchFetcher(urls),
+  const { data: speciesBatchData, error: speciesError, isLoading: speciesLoading } = useSWR<SpeciesData[], Error>(
+    initialSpeciesUrls.length > 0 ? ['species-batch', initialSpeciesUrls] as const : null,
+    ([, urls]) => batchFetcher<SpeciesData>(urls as string[]),
     swrOptions
   );
 
   // Collect unique type URLs from fetched pokemon data
   const typeUrls = useMemo(() => {
-    const uniqueTypeUrls = new Set<string>();
-    const urls: string[] = [];
-    if (pokemonBatchData) {
-      pokemonBatchData.forEach((data: PokemonData) => {
-        data.types.forEach(typeInfo => {
-          // Ensure typeInfo.type.url is accessed safely
-          if (typeInfo.type && typeInfo.type.url && !uniqueTypeUrls.has(typeInfo.type.url)) {
-            uniqueTypeUrls.add(typeInfo.type.url);
-            urls.push(typeInfo.type.url.replace('https://pokeapi.co/api/v2', ''));
-          }
-        });
-      });
-    }
-    return urls;
+    if (!pokemonBatchData) return [];
+
+    const urls = pokemonBatchData
+      .filter((data): data is PokemonData => !!data && !!data.types)
+      .flatMap(data =>
+        data.types
+          .filter(t => t.type && t.type.url)
+          .map(t => t.type.url.replace('https://pokeapi.co/api/v2', ''))
+      );
+
+    return Array.from(new Set(urls)); // remove duplicates
   }, [pokemonBatchData]);
 
   // Fetch Type data in batches
@@ -110,9 +107,9 @@ export function useBatchedPokemonData(pokemonEntries: PokemonEntry[]) {
     if (!typeBatchData) return new Map<string, TypeData>();
 
     const map = new Map<string, TypeData>();
-    typeBatchData.forEach((data: TypeData) => {
+    (typeBatchData as TypeData[]).forEach((data) => {
       if (data) {
-        map.set(data.name, data);
+        map.set(data.name.toLowerCase(), data);
       }
     });
     return map;
