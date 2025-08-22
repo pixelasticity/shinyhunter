@@ -2,10 +2,17 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { CaughtManager } from './CaughtManager';
+import { useTranslation, Trans } from 'react-i18next';
 import styles from './Stats.module.css';
-import { PokemonEntry, StatsProps } from '../lib/types';
+import { StatsProps, Name } from '../lib/types';
+import { useBatchedPokemonData } from '../hooks/useBatchedPokemonData';
 
-export default function Stats({ pokemonEntries, className = '' }: StatsProps) {
+export default function Stats({
+  pokemonEntries,
+  pokédex,
+  className = ''
+}: StatsProps) {
+  const { t, i18n } = useTranslation();
   const [caughtCount, setCaughtCount] = useState(0);
   const [shinyCount, setShinyCount] = useState(0);
   const [caughtPokemon, setCaughtPokemon] = useState<number[]>([]);
@@ -71,21 +78,44 @@ export default function Stats({ pokemonEntries, className = '' }: StatsProps) {
     return pokemonNameMap.get(id) || `#${id}`;
   };
 
+  const {
+      getSpeciesData,
+      isLoading: batchLoading,
+      error: batchError
+  } = useBatchedPokemonData(pokemonEntries);
+
+  const getTranslatedName = (name: string) => {
+    const speciesData = getSpeciesData(name);
+    const names: Name[] = speciesData?.names || [];
+    const nameData = names.find((n: Name) => n.language.name === i18n.language);
+    return nameData?.name || name;
+  };
+
   return (
     <div className={styles.progression}>
       {totalPokemon > 0 && (
         <>
-          <h3>Progress</h3>
+          <h3>
+            {!totalPokemon ? 'Loading stats...' :
+            !caughtCount ? 'Error loading data' :
+            t('progress.title')}
+          </h3>
           <div className={className}>
-            <strong>{caughtCount}</strong> / {totalPokemon} Pokemon caught ({percentage}%)
+            <Trans
+              i18nKey="progress.caught"
+              values={{ count: caughtCount, total: totalPokemon, percentage }}
+              components={{ 1: <strong /> }}
+            />
           </div>
           <div className={styles.shiny}>
-            ✨ <strong>{shinyCount}</strong> shiny Pokemon
+            <span aria-hidden="true">✨</span> <Trans i18nKey='progress.shinies' values={{ count: shinyCount }}>
+              ✨ <strong>0</strong> { t('progress.shinies', {count: shinyCount}) }
+            </Trans>
           </div>
-          <progress className={styles.progress} max={totalPokemon} value={caughtCount}></progress>
+          <progress className={styles.progress} max={totalPokemon} value={caughtCount} aria-label={t('progress.label', {count: caughtCount, total: totalPokemon, pokedex: t('pokedex_' + pokédex)})}></progress>
           {caughtCount > 0 && (
             <div className={styles.recent}>
-              Recently caught: {caughtPokemon.slice(-5).reverse().map(id => getPokemonName(id)).join(', ')}
+              {t('progress.recentList', { val: caughtPokemon.slice(-5).reverse().map(id => getTranslatedName(getPokemonName(id))) })}
             </div>
           )}
         </>
