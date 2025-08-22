@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import SkipLink from "./components/SkipLink";
+import LanguageProvider from "./components/LanguageProvider";
 import "./globals.css";
 
 const flexo = localFont({
@@ -28,8 +29,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={flexo.className}>
-        <SkipLink />
-        {children}
+        <LanguageProvider>
+          <SkipLink />
+          {children}
+        </LanguageProvider>
       </body>
     </html>
   );
