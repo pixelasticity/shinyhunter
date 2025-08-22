@@ -10,6 +10,7 @@ import Stats from "../../components/Stats";
 import SWRProvider from "../../components/SWRProvider";
 import Tabs from '../../components/Tabs';
 import ViewToggle from "../../components/ViewToggle";
+import LanguageSwitcher from "../../components/LanguageSwitcher";
 import { pokedexes } from '../../lib/constants';
 import { CaughtManager } from '../../components/CaughtManager';
 
@@ -58,6 +59,7 @@ function PokedexView() {
     <div className={styles.page}>
       <header className={styles.header}>
         <h1>Shiny Hunter</h1>
+        <LanguageSwitcher />
       </header>
       <main id="main-content" className={styles.main}>
         <Tabs tabs={pokedexes} activeTab={pokedexUrl} onTabChange={handleTabChange} />
