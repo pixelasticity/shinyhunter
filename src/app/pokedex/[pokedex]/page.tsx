@@ -53,7 +53,6 @@ function PokedexView() {
   const viewMode = (searchParams.get('view') || 'list') as 'list' | 'grid';
 
   const { data: pokemonData, error, isLoading } = useSWR(pokedexUrl);
-  console.log('PokedexPage SWR data:', { pokemonData, error, isLoading });
 
   return (
     <div className={styles.page}>
