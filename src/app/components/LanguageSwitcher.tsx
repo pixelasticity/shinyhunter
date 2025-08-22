@@ -20,9 +20,8 @@ export default function LanguageSwitcher() {
     const selectedLanguage = event.target.value;
     setLanguage(selectedLanguage);
     i18n.changeLanguage(selectedLanguage); // Update language in i18next
+    document.documentElement.lang = i18n.language;
   };
-
-  console.log(i18n.languages);
 
   // Ensure supportedLngs is treated as an array of strings
   const supportedLngs = (i18n.options.supportedLngs || []).filter(
