@@ -2,7 +2,7 @@ import { useMemo, useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { PokemonEntry, PokemonData, SpeciesData, TypeData } from '../lib/types';
 
-const batchFetcher = async (urls: string[]): Promise<any[]> => {
+const batchFetcher = async <T>(urls: string[]): Promise<T[]> => {
   if (urls.length === 0) {
     return [];
   }
@@ -11,7 +11,7 @@ const batchFetcher = async (urls: string[]): Promise<any[]> => {
   if (!res.ok) {
     throw new Error('Failed to fetch batch data');
   }
-  return res.json();
+  return res.json() as Promise<T[]>;
 };
 
 export function useBatchedPokemonData(pokemonEntries: PokemonEntry[]) {
@@ -107,8 +107,8 @@ export function useBatchedPokemonData(pokemonEntries: PokemonEntry[]) {
   }, [speciesBatchData, pokemonEntries]);
 
   const typeDataMap = useMemo(() => {
-    if (!typeBatchData) return new Map();
-    
+    if (!typeBatchData) return new Map<string, TypeData>();
+
     const map = new Map<string, TypeData>();
     typeBatchData.forEach((data: TypeData) => {
       if (data) {
