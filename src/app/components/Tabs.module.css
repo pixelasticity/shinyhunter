@@ -2,9 +2,3 @@
   display: flex;
   background-color: var(--ui-background);
 }
-
-@media all and (width >= 600px) {
-  .tabs {
-    margin-bottom: 20px;
-  }
-}
