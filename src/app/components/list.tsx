@@ -68,6 +68,7 @@ export default function List({
   const {
     getPokemonData,
     getSpeciesData,
+    getTypeData,
     isLoading: batchLoading,
     error: batchError
   } = useBatchedPokemonData(pokemonEntries);
@@ -121,6 +122,7 @@ export default function List({
             entry={entry}
             getPokemonData={getPokemonData}
             getSpeciesData={getSpeciesData}
+            getTypeData={getTypeData}
             batchLoading={batchLoading}
           />
         ))}
