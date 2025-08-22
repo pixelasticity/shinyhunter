@@ -64,7 +64,7 @@ export default function Stats({ pokemonEntries, className = '' }: StatsProps) {
     };
   }, [nationalIds]);
 
-  const percentage = totalPokemon > 0 ? ((caughtCount / totalPokemon) * 100).toFixed(1) : 0;
+  const percentage = totalPokemon > 0 ? ((caughtCount / totalPokemon) * 100).toFixed(1) : '0';
 
   // Helper function to get Pokemon name by ID
   const getPokemonName = (id: number): string => {
