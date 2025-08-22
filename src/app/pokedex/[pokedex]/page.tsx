@@ -3,6 +3,7 @@
 import styles from "../../page.module.css";
 import { Suspense, useEffect } from 'react';
 import { useParams, useRouter, useSearchParams, usePathname } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
 import useSWR, { useSWRConfig } from 'swr';
 import { Search } from "../../components/search";
 import List from "../../components/list";
@@ -15,6 +16,7 @@ import { pokedexes } from '../../lib/constants';
 import { CaughtManager } from '../../components/CaughtManager';
 
 function PokedexView() {
+  const { t } = useTranslation();
   useEffect(() => {
     CaughtManager.initialize();
   }, []);
@@ -62,11 +64,11 @@ function PokedexView() {
       </header>
       <main id="main-content" className={styles.main}>
         <Tabs tabs={pokedexes} activeTab={pokedexUrl} onTabChange={handleTabChange} />
-        <Stats pokemonEntries={pokemonData?.pokemon_entries || []} />
+        <Stats pokemonEntries={pokemonData?.pokemon_entries || []} pokédex={pokedexName} />
         <div className={styles.content}>
           <div className={styles['search-and-toggle']}>
             <Suspense>
-              <Search placeholder="Search by name or number&hellip;" />
+              <Search placeholder={t('search.placeholder')} />
             </Suspense>
             <ViewToggle initialView={viewMode} onViewChange={handleViewChange} />
           </div>
