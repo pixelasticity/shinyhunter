@@ -1,6 +1,7 @@
 'use client';
 
 import { forwardRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import styles from './Tab.module.css';
 
 interface TabProps {
@@ -13,6 +14,7 @@ interface TabProps {
 
 export const Tab = forwardRef<HTMLButtonElement, TabProps>(
   ({ index, label, isActive, onClick, onKeyDown }, ref) => {
+    const { t } = useTranslation();
     return (
       <button
         ref={ref}
@@ -27,7 +29,7 @@ export const Tab = forwardRef<HTMLButtonElement, TabProps>(
       tabIndex={isActive ? 0 : -1}
     >
         <span className='focus'>
-            {label}
+            {t(label)}
         </span>
     </button>
     );
