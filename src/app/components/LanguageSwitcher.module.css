@@ -1,0 +1,21 @@
+.languageSwitcher {
+  display: flex;
+  gap: 0.5rem;
+  padding: 1rem;
+  justify-content: flex-end;
+}
+
+.button {
+  background-color: var(--ui-background);
+  border: 1px solid var(--ui-border);
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.button.active {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
