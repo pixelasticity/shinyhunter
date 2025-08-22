@@ -1,0 +1,16 @@
+{
+  "search_placeholder": "Rechercher un Pokémon...",
+  "search_label": "Rechercher un Pokémon par nom ou numéro de Pokédex",
+  "search_clear": "Effacer",
+  "search_alt": "Rechercher",
+  "tab_all": "Tous",
+  "tab_caught": "Attrapé",
+  "tab_shiny": "Brillant",
+  "pokedex_paldea": "Paldea",
+  "pokedex_kitakami": "Kitakami",
+  "pokedex_blueberry": "Académie Myrtille",
+  "loading": "Chargement…",
+  "unknown": "Inconnu",
+  "number": "Numéro",
+  "types": "Types"
+}

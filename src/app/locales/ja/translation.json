@@ -1,0 +1,27 @@
+{
+  "search": {
+    "placeholder": "ポケモンを検索…",
+    "label": "名前または図鑑番号でポケモンを検索",
+    "clear": "クリア",
+    "alt": "検索"
+  },
+  "tab": {
+    "all": "すべて",
+    "caught": "捕まえた",
+    "shiny": "色違い"
+  },
+  "pokedex_paldea": "パルデア地方",
+  "pokedex_kitakami": "キタカミの里",
+  "pokedex_blueberry": "ブルーベリー学園",
+  "loading": "読み込み中…",
+  "unknown": "不明",
+  "number": "番号",
+  "types": "タイプ",
+  "progress": {
+    "title": "進み具合",
+    "caught": "捕まえたポケモン <1>{{count}}</1> / {{total}}匹（{{percentage}}％）",
+    "shinies": "キラポケモン <1>{{count}}</1>匹ゲット！",
+    "label": "{{pokedex}}で、{{total}}匹のうち{{count}}匹のポケモンを捕まえました。",
+    "recentList": "最近捕まえたポケモン：{{val, list}}"
+  }
+}

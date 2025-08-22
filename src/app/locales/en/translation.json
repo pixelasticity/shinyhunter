@@ -1,0 +1,22 @@
+{
+  "search": {
+    "placeholder": "Search Pokémon…",
+    "label": "Search for Pokemon by name or Pokédex number",
+    "clear": "Clear",
+    "alt": "Search"
+  },
+  "pokedex_paldea": "Paldea",
+  "pokedex_kitakami": "Kitakami",
+  "pokedex_blueberry": "Blueberry Academy",
+  "loading": "Loading…",
+  "unknown": "Unknown",
+  "number": "Number",
+  "types": "Types",
+  "progress": {
+    "title": "Progress",
+    "caught": "<1>{{count}}</1> / {{total}} Pokémon caught ({{percentage}}%)",
+    "shinies": "<1>{{count}}</1> shiny Pokémon",
+    "label": "You have caught {{count}} out of {{total}} Pokémon in the {{pokedex}} region",
+    "recentList": "Recently caught: {{val, list}}"
+  }
+}
