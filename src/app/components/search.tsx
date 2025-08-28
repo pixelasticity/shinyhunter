@@ -26,7 +26,7 @@ function SearchForm({ placeholder }: { placeholder: string }) {
   return (
     <form className={styles.form} role="search">
       <div className={styles.box}>
-        <label id="search-description"  htmlFor="search" className={styles['sr-only']}>
+        <label id="search-description" htmlFor="search" className="visually-hidden">
           {t('search.label')}
         </label>
         <input
