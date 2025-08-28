@@ -33,8 +33,8 @@ export default function LanguageSwitcher() {
       <label htmlFor="language" className="visually-hidden">{t('lang.change')}</label>
       <select
         id="language"
-        name=""
-        value={language}
+        name="switcher"
+        value={i18n.language}
         onChange={handleLanguageChange}
         className={styles.button}
       >
@@ -42,7 +42,6 @@ export default function LanguageSwitcher() {
         <option
           key={key}
           value={code}
-          selected={i18n.language === code}
         >
           {languageNames[code] || code}
         </option>
