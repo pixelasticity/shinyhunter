@@ -29,7 +29,7 @@ export default function LanguageSwitcher() {
   );
 
   return (
-    <div className={styles.languageSwitcher}>
+    <div className={styles.switcher}>
       <select
         id="language"
         name=""
