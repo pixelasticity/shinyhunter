@@ -1,4 +1,7 @@
 {
+  "lang": {
+    "change": "Select your display language"
+  },
   "search": {
     "placeholder": "Search Pokémon…",
     "label": "Search for Pokemon by name or Pokédex number",
