@@ -5,7 +5,7 @@ import { useState } from 'react';
 import styles from './language.module.css';
 
 export default function LanguageSwitcher() {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   // Set the initial language from i18next's detected or default language
   const [language, setLanguage] = useState(i18n.language);
 
