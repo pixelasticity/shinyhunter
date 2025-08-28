@@ -2,7 +2,6 @@
 
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
-import styles from './LanguageSwitcher.module.css';
 
 export default function LanguageSwitcher() {
   const { i18n } = useTranslation();

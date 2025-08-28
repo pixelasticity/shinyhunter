@@ -1,7 +1,7 @@
-.languageSwitcher {
+.switcher {
   display: flex;
   gap: 0.5rem;
-  padding: 1rem;
+  padding-inline-start: 1rem;
   justify-content: flex-end;
 }
 
