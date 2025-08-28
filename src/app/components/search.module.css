@@ -5,6 +5,7 @@
 .box {
     max-width: 768px;
     margin-inline: auto;
+    margin-block-end: 1em ;
     position: relative;
     display: flex;
     align-items: stretch;
@@ -16,7 +17,7 @@
 }
 
 .box:has(.input:focus-visible) {
-    outline: 2px solid #fdb71d;
+    outline: 2px solid var(--ui-outline);
     outline-offset: 2px;
 }
 

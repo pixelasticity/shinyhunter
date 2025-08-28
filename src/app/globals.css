@@ -39,6 +39,8 @@
   --ui-success: #54b564;
   --ui-progress-bg: #f0f0f0;
   --ui-progress-fill: #4CAF50;
+  --yellow: #fdb71d;
+  --ui-outline: var(--yellow);
 
   /* Checkbox Colors */
   --checkbox-bg: var(--background);

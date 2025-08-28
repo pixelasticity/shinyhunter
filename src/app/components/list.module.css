@@ -20,19 +20,26 @@
     padding-inline: 8px;
 }
 
+.view {
+    --row-size: 96px;
+    --radius-full: calc(var(--row-size) / 2);
+    max-width: 94.25%;
+    margin-inline: auto;
+}
+
 .grid-view {
     display: grid;
-    grid-template-columns: repeat(auto-fit, 96px);
+    grid-template-columns: repeat(auto-fit, var(--row-size));
     gap: 0.875em;
     justify-content: center;
-    grid-auto-rows: 96px;
+    grid-auto-rows: var(--row-size);
     max-width: calc(100% - 2em);
     margin-inline: auto;
 }
 
 .grid-view .pokemon {
     margin: 0;
-    border-radius: 48px;
+    border-radius: var(--radius-full);
     grid-template-areas:
         "sprite" 
         "sprite";
@@ -41,6 +48,10 @@
 }
 
 @media all and (width >= 600px) {
+    .view {
+        --row-size: 128px;
+    }
+
     .grid-view {
         grid-template-columns: repeat(auto-fit, 128px);
         grid-auto-rows: 128px;
@@ -67,14 +78,14 @@
     max-width: 768px;
     margin-inline: auto;
     margin-block-end: 1em;
-    border-radius: 48px 16px 16px 48px;
+    border-radius: var(--radius-full) 16px 16px var(--radius-full);
     background-color: rgb(242, 242, 242);
     background-image: linear-gradient(100deg, rgba(255 255 255 / 0%), rgba(255 255 255 / 60%));
     background-repeat: no-repeat;
     gap: 0px;
     display: grid;
-    grid-template-columns: 96px 1fr 34px 62px;
-    grid-template-rows: 54px 42px;
+    grid-template-columns: var(--row-size) 1fr 34px 62px;
+    grid-template-rows: 64px calc(var(--row-size) - 64px);
     justify-content: start;
     align-items: center;
     box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 5px;
@@ -86,15 +97,37 @@
     grid-area: 1 / 2 / 2 / 4;
     justify-self: auto;
     display: flex;
-    gap: 12px;
+    flex-direction: column-reverse;
+    gap: 0px;
     align-items: baseline;
     align-self: end;
     padding-left: 0.5em;
 }
 
+@media all and (width = 375px) {
+    .name {
+        line-height: 1.334356;
+    }
+}
+
+@media all and (width >= 480px) {
+    .pokemon {
+        grid-template-rows: 64px calc(var(--row-size) - 54px);
+    }
+
+    .info {
+        flex-direction: row;
+        gap: 12px;
+    }
+
+    .name {
+        margin-block-end: 6px;
+    }
+}
+
 .name {
     font-size: 5.7971vw;
-    line-height: 1.333;
+    line-height: 1.33333;
     font-weight: normal;
     margin-block-end: 2px;
 }
@@ -109,6 +142,7 @@
 
 .number {
     font-size: 4.347826vw;
+    line-height: 0.8586667;
     color: #616161;
     font-weight: bold;
 }
@@ -125,10 +159,17 @@
 .sprite::before {
     content: url('/pokéball.svg');
     position: absolute;
-    width: 96px;
-    height: 96px;
+    width: var(--row-size);
+    height: var(--row-size);
     mix-blend-mode: soft-light;
+    transform: scale3d(1, 1, 1);
+    transition: transform 0.25s ease-out 0.25s;
+    will-change: transform;
     z-index: 1;
+}
+
+.sprite:has(img[alt=""])::before {
+    transform: scale3d(0.125, 0.125, 0.75) rotate(180deg);
 }
 
 .sprite img {
@@ -136,8 +177,8 @@
     display: block;
     margin: var(--base);
     position: relative;
-    width: calc(96px - (var(--base) * 2));
-    height: calc(96px - (var(--base) * 2));
+    width: calc(var(--row-size) - (var(--base) * 2));
+    height: calc(var(--row-size) - (var(--base) * 2));
     z-index: 2;
     transition: filter 0.25s ease-in-out 0s;
 }
@@ -160,15 +201,22 @@
     box-sizing: content-box;
     border: 0.07142857em solid rgba(255 255 255 / 42.5%);
     border-radius: 0.3125em;
-    line-height: 1.7142857;
+    line-height: 1.57142857;
     max-width: 110px;
     cursor: pointer;
     float: left;
-    height: 1.7142857em;
+    height: 1.57142857em;
     margin: 0 0 0 0.5em;
     text-align: center;
     font-size: .875rem;
-    padding: 0 1em;
+    padding: 0 0.75em;
+}
+
+@media all and (width >= 480px) {
+    .type {
+        line-height: 1.7142857;
+        height: 1.7142857em;
+    }
 }
 
 .type:first-child {
@@ -352,8 +400,8 @@
 }
 
 .tag {
-    width: 96px;
-    height: 96px;
+    width: var(--row-size);
+    height: var(--row-size);
     clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 0%);
     box-shadow: rgba(0, 0, 0, 0.25) 1px 2px 8px 0px;
     background-size: cover, 31.25%;
@@ -421,6 +469,7 @@
     
     .name {
         font-size: 36px;
+        margin-block-end: 2px;
     }
 
     .number {
@@ -443,6 +492,7 @@
         width: 100%;
         height: 1.75em;
         margin: 0 0 0 0.75em;
+        padding-inline: 1em;
         font-size: 1rem;
     }
 
