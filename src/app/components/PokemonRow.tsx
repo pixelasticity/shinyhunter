@@ -77,10 +77,12 @@ export default function PokemonRow({
         {isIntersecting ? (
           <Image
             src={spriteInfo.spritePath}
-            alt={spriteInfo.altText}
+            alt=""
             height={64}
             width={64}
+            placeholder="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAMAAAANIilAAAAADFBMVEUAAABgYGAAgACoqKjqifsdAAAABHRSTlP//wD//gy7CwAAAI5JREFUSIntktsKgDAMQ1v7//9sL+pbqqsgCMmDG+qhSzLZXkgIEyZMmDBhwoS/gOXmM8RCZrWuws7p9ViEndZDkG08+8xAfcG/YFbLs2K6g09Nju1DzRRn3U6W7Mka07AFzZKyK0iD9xFTJCbHZnFyOg41rrvACh4GVp4HgcX1rLRn17POO+r5iQj/Bt4BQR4bYWO/1O0AAAAASUVORK5CYII="
             priority={entry.entry_number <= 20} // Prioritize first 20 images for LCP
+            onLoad={(e) => {const i = e.target as HTMLImageElement; i.setAttribute('alt', spriteInfo.altText)}}
           />
         ) : (
           <Image alt="" width={64} height={64} src={placeholder} />
