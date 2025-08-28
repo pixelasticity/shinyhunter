@@ -9,6 +9,7 @@ import { usePokemonState } from '../hooks/usePokemonState';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 import { capitalizeFirst } from '../lib/utils';
 import { PokemonEntry, Name, Types, PokemonData, SpeciesData, TypeData } from '../lib/types';
+import placeholder from '../../../public/placeholder.png';
 
 type BatchedData = {
   getPokemonData: (name: string) => PokemonData | undefined;
@@ -82,7 +83,7 @@ export default function PokemonRow({
             priority={entry.entry_number <= 20} // Prioritize first 20 images for LCP
           />
         ) : (
-          <Image alt="" width="64" height="64" src="/placeholder.png" />
+          <Image alt="" width={64} height={64} src={placeholder} />
         )}
       </div>
       <div className={styles.info}>
