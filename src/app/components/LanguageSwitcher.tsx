@@ -30,6 +30,7 @@ export default function LanguageSwitcher() {
 
   return (
     <div className={styles.switcher}>
+      <label htmlFor="language" className="visually-hidden">{t('lang.change')}</label>
       <select
         id="language"
         name=""
