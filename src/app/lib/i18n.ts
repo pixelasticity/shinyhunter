@@ -13,7 +13,7 @@ i18n
     interpolation: {
       escapeValue: false, // React already safes from xss
     },
-    supportedLngs: ['en', 'fr', 'ja'],
+    supportedLngs: ['en', 'es', 'fr', 'ja'],
   });
 
 export default i18n;

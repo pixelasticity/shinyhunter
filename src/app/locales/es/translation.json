@@ -1,0 +1,22 @@
+{
+  "search": {
+    "placeholder": "Buscar Pokémon…",
+    "label": "Busca Pokémon por nombre o número de Pokédex",
+    "clear": "Borrar",
+    "alt": "Enviar"
+  },
+  "pokedex_paldea": "Paldea",
+  "pokedex_kitakami": "Noroteo",
+  "pokedex_blueberry": "Academia Arándano",
+  "loading": "Cargando…",
+  "unknown": "Desconocido",
+  "number": "Número",
+  "types": "Tipos",
+  "progress": {
+    "title": "Tu Progreso",
+    "caught": "<1>{{count}}</1> / {{total}} Pokémon caught ({{percentage}}%)",
+    "shinies": "<1>{{count}}</1> shiny Pokémon",
+    "label": "You have caught {{count}} out of {{total}} Pokémon in the {{pokedex}} region",
+    "recentList": "Atrapado recientemente: {{val, list}}"
+  }
+}
